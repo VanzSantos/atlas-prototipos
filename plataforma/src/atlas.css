@@ -335,7 +335,7 @@ a {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding: var(--espaco-m) var(--espaco-xp) var(--espaco-p);
+  padding: var(--espaco-m) var(--espaco-xp) 6px;
 }
 
 .atlas-cartao-titulo {
@@ -378,39 +378,34 @@ a {
   text-underline-offset: 3px;
 }
 
-/* Metadados empilhados: rótulo à esquerda, valor à direita */
+/* Metadados logo abaixo do título, em frases */
 .atlas-cartao-meta {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin: var(--espaco-p) var(--espaco-xp) 0;
-  padding-top: var(--espaco-p);
-  border-top: 1px solid var(--borda-base);
+  gap: 4px;
+  margin: 0 var(--espaco-xp);
+  padding: 0;
+  list-style: none;
+  color: var(--texto-secundario);
+  font-size: var(--texto-micro-size);
+  line-height: var(--texto-micro-line-height);
 }
 
-.atlas-cartao-meta > div {
+.atlas-cartao-meta li {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: var(--espaco-p);
+  gap: 6px;
   min-width: 0;
 }
 
-.atlas-cartao-meta dt {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
-  color: var(--texto-secundario);
-  font-size: var(--texto-micro-size);
-}
-
-.atlas-cartao-meta dd {
-  margin: 0;
+.atlas-cartao-meta li > span {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: var(--texto-micro-size);
+}
+
+.atlas-cartao-meta strong {
+  color: var(--texto-primario);
   font-weight: 500;
 }
 

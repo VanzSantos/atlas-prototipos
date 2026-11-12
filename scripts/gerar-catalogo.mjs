@@ -36,7 +36,7 @@ function git(args) {
 }
 
 function historico(caminho) {
-  const commits = git(["log", "--format=%h%x1f%an%x1f%aI", "--", caminho])
+  const commits = git(["log", "--format=%h%x1f%aN%x1f%aI", "--", caminho])
     .split("\n")
     .filter(Boolean)
     .map((l) => {
@@ -46,7 +46,7 @@ function historico(caminho) {
   if (!commits.length) return { criadoEm: null, criadoPor: null, atualizadoEm: null, alteradoPor: null, ultimoCommit: null, autores: [] };
   // Data de criação segue o prototype.json mesmo se a pasta foi renomeada ou movida.
   const [shaCriacao, autorCriacao, dataCriacao] =
-    git(["log", "--follow", "--format=%h%x1f%an%x1f%aI", "--", `${caminho}/prototype.json`]).split("\n").filter(Boolean).at(-1)?.split("\x1f") ?? [];
+    git(["log", "--follow", "--format=%h%x1f%aN%x1f%aI", "--", `${caminho}/prototype.json`]).split("\n").filter(Boolean).at(-1)?.split("\x1f") ?? [];
   const primeiro = dataCriacao ? { sha: shaCriacao, autor: autorCriacao, data: dataCriacao } : commits.at(-1);
   const ultimo = commits[0];
   return {

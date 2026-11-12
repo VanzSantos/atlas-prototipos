@@ -195,29 +195,20 @@ function Cartao({ prototipo: p, origem }: { prototipo: Prototipo; origem?: strin
         </h2>
       </div>
 
-      <dl className="atlas-cartao-meta">
-        <div>
-          <dt>
-            <Icon name="star" size="small" color="var(--icone-secundario)" decorative />
-            Criado em
-          </dt>
-          <dd>{formatarData(p.git.criadoEm)}</dd>
-        </div>
-        <div>
-          <dt>
-            <Icon name="clock" size="small" color="var(--icone-secundario)" decorative />
-            Atualizado em
-          </dt>
-          <dd>{formatarData(p.git.atualizadoEm)}</dd>
-        </div>
-        <div>
-          <dt>
-            <Icon name="user" size="small" color="var(--icone-secundario)" decorative />
-            Atualizado por
-          </dt>
-          <dd>{p.git.alteradoPor ?? "—"}</dd>
-        </div>
-      </dl>
+      <ul className="atlas-cartao-meta">
+        <li>
+          <Icon name="star" size="small" color="var(--icone-secundario)" decorative />
+          <span>
+            Criado por <strong>{p.git.criadoPor ?? "—"}</strong> em {formatarData(p.git.criadoEm)}
+          </span>
+        </li>
+        <li>
+          <Icon name="clock" size="small" color="var(--icone-secundario)" decorative />
+          <span>
+            Atualizado por <strong>{p.git.alteradoPor ?? "—"}</strong> em {formatarData(p.git.atualizadoEm)}
+          </span>
+        </li>
+      </ul>
     </article>
   );
 }
