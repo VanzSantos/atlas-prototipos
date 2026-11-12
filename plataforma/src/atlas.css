@@ -438,3 +438,38 @@ a {
 [id$="-programas-panel"] > ul {
   padding-left: 0 !important;
 }
+
+/* Itens da barra lateral: em vez do fundo verde sólido do SeleneSDK, um fundo sutil,
+   só um pouco mais escuro (tema claro) ou mais claro (tema escuro) que a barra,
+   e o texto do item atual em verde. */
+.atlas-layout {
+  --atlas-nav-hover: rgba(17, 24, 39, 0.04);
+  --atlas-nav-atual: rgba(17, 24, 39, 0.06);
+}
+
+:root[data-theme="dark"] .atlas-layout {
+  --atlas-nav-hover: rgba(255, 255, 255, 0.04);
+  --atlas-nav-atual: rgba(255, 255, 255, 0.07);
+}
+
+.atlas-layout nav li > a:hover,
+.atlas-layout nav li > button:hover {
+  background: var(--atlas-nav-hover);
+  color: var(--texto-primario);
+}
+
+.atlas-layout nav li > a:hover svg,
+.atlas-layout nav li > button:hover svg {
+  fill: var(--icone-secundario);
+}
+
+.atlas-layout nav li > a[aria-current="page"],
+.atlas-layout nav li > a[aria-current="page"]:hover {
+  background: var(--atlas-nav-atual);
+  color: var(--acao-link-texto);
+  font-weight: 600;
+}
+
+.atlas-layout nav li > a[aria-current="page"] svg {
+  fill: var(--acao-link-texto);
+}
