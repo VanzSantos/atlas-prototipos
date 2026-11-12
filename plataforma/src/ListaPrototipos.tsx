@@ -196,16 +196,16 @@ function Cartao({ prototipo: p, origem }: { prototipo: Prototipo; origem?: strin
       </div>
 
       <ul className="atlas-cartao-meta">
-        <li>
-          <Icon name="star" size="small" color="var(--icone-secundario)" decorative />
+        <li title="Criação">
+          <Icon name="star" size="small" color="var(--icone-secundario)" decorative={false} accessibleLabel="Criado por" />
           <span>
-            Criado por <strong>{p.git.criadoPor ?? "—"}</strong> em {formatarData(p.git.criadoEm)}
+            <strong>{p.git.criadoPor ?? "—"}</strong> em {formatarData(p.git.criadoEm)}
           </span>
         </li>
-        <li>
-          <Icon name="clock" size="small" color="var(--icone-secundario)" decorative />
+        <li title="Última atualização">
+          <Icon name="clock" size="small" color="var(--icone-secundario)" decorative={false} accessibleLabel="Atualizado por" />
           <span>
-            Atualizado por <strong>{p.git.alteradoPor ?? "—"}</strong> em {formatarData(p.git.atualizadoEm)}
+            <strong>{p.git.alteradoPor ?? "—"}</strong> em {formatarData(p.git.atualizadoEm)}
           </span>
         </li>
       </ul>
