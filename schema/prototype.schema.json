@@ -2,10 +2,21 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "prototype.schema.json",
   "title": "Protótipo do Atlas",
-  "description": "Metadados de um protótipo. Fica em prototipos/<projeto>/<nome>/prototype.json.",
+  "description": "Metadados de um protótipo. Fica em prototipos/<programa>/<projeto>/<nome>/prototype.json.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["versao", "titulo", "projeto", "modulo", "fluxo", "status", "donos", "entrada"],
+  "required": [
+    "versao",
+    "programa",
+    "projeto",
+    "fluxo",
+    "status",
+    "dispositivo",
+    "donos",
+    "entrada",
+    "canvas",
+    "mapa"
+  ],
   "properties": {
     "$schema": {
       "type": "string",
@@ -15,37 +26,49 @@
       "description": "Versão do contrato. Hoje é sempre 1.",
       "const": 1
     },
-    "titulo": {
-      "type": "string",
-      "minLength": 3,
-      "maxLength": 80,
-      "description": "Nome que aparece no catálogo."
-    },
     "descricao": {
       "type": "string",
       "maxLength": 300,
       "description": "Uma ou duas frases sobre o protótipo."
     },
+    "programa": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "Igual ao nome da pasta do programa (prototipos/<programa>/)."
+    },
     "projeto": {
       "type": "string",
       "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
-      "description": "Igual ao nome da pasta do projeto (minúsculas, com hífen)."
+      "description": "Igual ao nome da pasta do projeto (prototipos/<programa>/<projeto>/)."
     },
     "modulo": {
       "type": "string",
       "minLength": 2,
       "maxLength": 60,
-      "description": "Módulo dentro do projeto. Ex.: Atendimento."
+      "description": "Opcional. Agrupa fluxos dentro do projeto. Ex.: Atendimento."
     },
     "fluxo": {
       "type": "string",
-      "minLength": 2,
-      "maxLength": 60,
-      "description": "Fluxo dentro do módulo. Ex.: Agendar consulta."
+      "minLength": 3,
+      "maxLength": 80,
+      "description": "Nome do fluxo. É o nome do protótipo no catálogo. Ex.: Agendar consulta."
     },
     "status": {
-      "enum": ["rascunho", "em-andamento", "em-revisao", "aprovado", "arquivado"],
+      "enum": [
+        "rascunho",
+        "em-andamento",
+        "em-revisao",
+        "aprovado",
+        "arquivado"
+      ],
       "description": "Situação do protótipo."
+    },
+    "dispositivo": {
+      "enum": [
+        "desktop",
+        "app"
+      ],
+      "description": "desktop = responsivo (o Atlas permite ver em desktop e em mobile). app = feito para celular, sem responsividade (o Atlas mostra numa moldura de celular)."
     },
     "donos": {
       "type": "array",
@@ -71,15 +94,36 @@
       "pattern": "^(?!/)(?!.*\\.\\.)[^\\s]+\\.html$",
       "description": "Arquivo HTML de entrada, relativo à saída estática. Normalmente index.html."
     },
+    "canvas": {
+      "type": "string",
+      "pattern": "^(?!/)(?!.*\\.\\.)[^\\s]+\\.html$",
+      "description": "Canvas com as telas estáticas, anotações e detalhamentos, relativo à pasta do protótipo. Padrão: canvas/index.html."
+    },
+    "mapa": {
+      "type": "string",
+      "pattern": "^(?!/)(?!.*\\.\\.)[^\\s]+\\.html$",
+      "description": "Mapa do fluxo (flowmap/sitemap) com toda a navegação, relativo à pasta do protótipo. Padrão: mapa/index.html."
+    },
     "origem": {
-      "enum": ["claude", "codex", "figma-make", "codigo", "outro"],
+      "enum": [
+        "claude",
+        "codex",
+        "figma-make",
+        "codigo",
+        "outro"
+      ],
       "description": "Como o protótipo foi feito."
     },
     "build": {
-      "type": ["object", "null"],
+      "type": [
+        "object",
+        "null"
+      ],
       "description": "null = a pasta já é estática. Objeto = comando que gera a saída estática.",
       "additionalProperties": false,
-      "required": ["comando"],
+      "required": [
+        "comando"
+      ],
       "properties": {
         "comando": {
           "type": "string",
@@ -99,7 +143,10 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "titulo"],
+        "required": [
+          "id",
+          "titulo"
+        ],
         "properties": {
           "id": {
             "type": "string",

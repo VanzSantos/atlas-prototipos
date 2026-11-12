@@ -12,5 +12,6 @@
 /AGENTS.md              @VanzSantos
 
 # Protótipos (exemplos, descomente e ajuste)
-# /prototipos/portal-beneficiario/            @usuario-do-time
-# /prototipos/portal-beneficiario/agendamento/ @dono-do-prototipo
+# /prototipos/<programa>/                     @responsavel-do-programa
+# /prototipos/<programa>/<projeto>/           @responsavel-do-projeto
+# /prototipos/<programa>/<projeto>/<nome>/    @dono-do-prototipo

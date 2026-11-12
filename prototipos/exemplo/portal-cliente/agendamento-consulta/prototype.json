@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../../schema/prototype.schema.json",
+  "versao": 1,
+  "programa": "exemplo",
+  "projeto": "portal-cliente",
+  "modulo": "Atendimento",
+  "fluxo": "Agendar consulta",
+  "descricao": "Exemplo de protótipo estático: HTML puro, sem build, com duas telas por hash.",
+  "status": "em-andamento",
+  "dispositivo": "app",
+  "donos": [
+    "VanzSantos"
+  ],
+  "tags": [
+    "exemplo",
+    "agenda"
+  ],
+  "entrada": "index.html",
+  "canvas": "canvas/index.html",
+  "mapa": "mapa/index.html",
+  "origem": "claude",
+  "build": null,
+  "telas": [
+    {
+      "id": "escolher-data",
+      "titulo": "Escolher data",
+      "rota": "#/data"
+    },
+    {
+      "id": "confirmar",
+      "titulo": "Confirmação",
+      "rota": "#/confirmar"
+    }
+  ]
+}

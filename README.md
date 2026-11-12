@@ -8,9 +8,11 @@ código, que hoje estão espalhados em links e repositórios diferentes.
 
 ## Como funciona
 
-- Cada protótipo vive na sua própria pasta: `prototipos/<projeto>/<nome>/`.
-- Cada pasta tem um `prototype.json` que descreve o protótipo (dono, projeto, módulo, fluxo,
-  status, tags, entrada).
+- A organização é **Programa → Projeto → Protótipo** (um protótipo = um fluxo).
+- Cada protótipo vive na sua própria pasta: `prototipos/<programa>/<projeto>/<nome>/`, com três peças: o protótipo
+  navegável, o **canvas** (telas estáticas com anotações) e o **mapa do fluxo** (toda a navegação).
+- Cada pasta tem um `prototype.json` que descreve o protótipo (programa, projeto, fluxo, status,
+  donos, tags e os caminhos de entrada, canvas e mapa).
 - A plataforma lê todos os `prototype.json` e monta o catálogo sozinha. **Não existe lista
   central para editar.**
 - Toda mudança entra por uma branch e um Pull Request (PR). Cada PR ganha um link de preview.
@@ -21,9 +23,15 @@ código, que hoje estão espalhados em links e repositórios diferentes.
 ```
 atlas-prototipos/
 ├─ plataforma/                 app do catálogo (Atlas)
-├─ prototipos/<projeto>/<nome>/
-│    ├─ prototype.json         metadados do protótipo
-│    └─ código do protótipo    gera uma saída estática em dist/
+├─ prototipos/<programa>/
+│    ├─ programa.json          nome do programa
+│    └─ <projeto>/
+│         ├─ projeto.json      nome do projeto
+│         └─ <nome>/           um protótipo (um fluxo)
+│              ├─ prototype.json
+│              ├─ index.html   protótipo navegável (ou código + build)
+│              ├─ canvas/      telas estáticas com anotações
+│              └─ mapa/        mapa do fluxo
 ├─ schema/                     contrato do prototype.json
 ├─ scripts/                    validação e build (neutros, rodam em qualquer CI)
 ├─ docs/                       guias e modelo de PR
@@ -36,9 +44,22 @@ atlas-prototipos/
 
 ## Começando
 
+Precisa do Node 20 ou mais novo.
+
+```bash
+npm install
+```
+
+```bash
+npm run dev
+```
+
+Abra http://localhost:5173. Outros comandos: `npm run validar` (confere os `prototype.json`) e
+`npm run build` (monta o site completo em `site/`, igual ao publicado).
+
 - Vai contribuir? Leia o [CONTRIBUTING.md](CONTRIBUTING.md).
 - Usa Codex ou Claude? O agente lê o [AGENTS.md](AGENTS.md) sozinho. Basta pedir.
 
 ## Hierarquia
 
-`Projeto → Módulo → Fluxo → Tela`, herdada do ProtoTable (SeleneSDK).
+`Programa → Projeto → Fluxo (protótipo) → Tela`. O módulo é opcional e serve de filtro dentro do projeto.

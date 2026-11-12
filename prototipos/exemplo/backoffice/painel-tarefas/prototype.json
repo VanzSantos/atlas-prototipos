@@ -1,0 +1,25 @@
+{
+  "$schema": "../../../../schema/prototype.schema.json",
+  "versao": 1,
+  "programa": "exemplo",
+  "projeto": "backoffice",
+  "modulo": "Gestão",
+  "fluxo": "Acompanhar tarefas",
+  "descricao": "Exemplo de protótipo com build: o comando gera a saída estática em dist/.",
+  "status": "rascunho",
+  "dispositivo": "desktop",
+  "donos": [
+    "VanzSantos"
+  ],
+  "tags": [
+    "exemplo"
+  ],
+  "entrada": "index.html",
+  "canvas": "canvas/index.html",
+  "mapa": "mapa/index.html",
+  "origem": "codex",
+  "build": {
+    "comando": "node build.mjs",
+    "saida": "dist"
+  }
+}

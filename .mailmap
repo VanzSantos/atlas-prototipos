@@ -1,0 +1,4 @@
+# Unifica o nome de cada pessoa no histórico (o Atlas mostra "Criado por" e "Atualizado por").
+# O merge pelo site do GitHub usa o nome do perfil; o commit local usa o nome do git config.
+# Formato: Nome Exibido <email-que-aparece-no-commit>
+Vanz Santos <43813178+VanzSantos@users.noreply.github.com>
