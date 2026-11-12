@@ -118,9 +118,6 @@ a {
   min-width: 160px;
 }
 
-.atlas-barra-tela {
-  width: 200px;
-}
 
 .atlas-quadro {
   flex: 1;
@@ -501,4 +498,162 @@ a {
   font-weight: 500;
   line-height: 1.5;
   text-align: center;
+}
+
+/* Área do protótipo: o quadro ocupa tudo e o painel de telas flutua por cima */
+.atlas-area {
+  position: relative;
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.atlas-area .atlas-quadro {
+  flex: 1;
+  height: 100%;
+}
+
+/* Painel flutuante de telas */
+.atlas-telas {
+  position: absolute;
+  top: var(--espaco-m);
+  left: var(--espaco-m);
+  z-index: 5;
+  width: 232px;
+  max-height: calc(100% - 2 * var(--espaco-m));
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  border: 1px solid var(--borda-base);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--fundo-superficie) 92%, transparent);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--sombra-m);
+  color: var(--texto-primario);
+  font-family: var(--texto-p-family);
+  overflow: hidden;
+}
+
+:root[data-theme="dark"] .atlas-telas {
+  background: color-mix(in srgb, var(--fundo-secundario) 92%, transparent);
+}
+
+.atlas-telas-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--espaco-p) var(--espaco-p) var(--espaco-p) var(--espaco-m);
+}
+
+.atlas-telas-titulo {
+  color: var(--texto-secundario);
+  font-size: var(--texto-micro-size);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.atlas-telas-recolher {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: var(--raio-p);
+  background: none;
+  color: var(--icone-secundario);
+  cursor: pointer;
+}
+
+.atlas-telas-recolher:hover {
+  background: var(--atlas-nav-hover, rgba(17, 24, 39, 0.04));
+}
+
+.atlas-telas-lista {
+  margin: 0;
+  padding: 0 var(--espaco-p) var(--espaco-p);
+  list-style: none;
+  overflow-y: auto;
+}
+
+.atlas-telas-lista button {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-p);
+  width: 100%;
+  padding: var(--espaco-p);
+  border: 0;
+  border-radius: var(--raio-p);
+  background: none;
+  color: var(--texto-primario);
+  font: inherit;
+  font-size: var(--texto-p-size);
+  text-align: left;
+  cursor: pointer;
+}
+
+.atlas-telas-lista button:hover {
+  background: rgba(17, 24, 39, 0.04);
+}
+
+:root[data-theme="dark"] .atlas-telas-lista button:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.atlas-telas-lista button[aria-current="page"] {
+  background: rgba(17, 24, 39, 0.06);
+  color: var(--acao-link-texto);
+  font-weight: 600;
+}
+
+:root[data-theme="dark"] .atlas-telas-lista button[aria-current="page"] {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.atlas-telas-numero {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: rgba(17, 24, 39, 0.06);
+  color: var(--texto-secundario);
+  font-size: var(--texto-micro-size);
+  font-weight: 500;
+}
+
+:root[data-theme="dark"] .atlas-telas-numero {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.atlas-telas-nome {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Recolhido: vira uma pílula pequena */
+.atlas-telas-recolhido {
+  width: auto;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--espaco-p);
+  padding: var(--espaco-p) var(--espaco-m);
+  border-radius: 999px;
+  font-size: var(--texto-p-size);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.atlas-telas-recolhido:hover {
+  box-shadow: var(--sombra-m), 0 0 0 1px var(--borda-base);
+}
+
+.atlas-telas-recolhido .atlas-nav-contagem {
+  background: rgba(17, 24, 39, 0.06);
+}
+
+:root[data-theme="dark"] .atlas-telas-recolhido .atlas-nav-contagem {
+  background: rgba(255, 255, 255, 0.08);
 }

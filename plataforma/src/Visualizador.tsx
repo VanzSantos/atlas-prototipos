@@ -1,15 +1,17 @@
-import { Select } from "selenesdk/src/components/Select/Select";
+import { useRef, useState } from "react";
 import { Tabs } from "selenesdk/src/components/Tabs/Tabs";
 import { Badge } from "selenesdk/src/components/Badge/Badge";
 import { EmptyState } from "selenesdk/src/components/EmptyState/EmptyState";
 import { hrefPrototipo, hrefProjeto, hrefRecentes, type Aba } from "./rotas";
+import { PainelTelas } from "./PainelTelas";
 import { STATUS_COR, STATUS_ROTULO, formatarData, type Catalogo } from "./tipos";
-
-const INICIO = "*";
 
 /** Abre o protótipo dentro do Atlas, com abas Protótipo / Canvas / Mapa do fluxo. */
 export function Visualizador({ catalogo, id, aba, tela }: { catalogo: Catalogo; id: string; aba: Aba; tela: string }) {
   const p = catalogo.prototipos.find((x) => x.id === id);
+  const quadro = useRef<HTMLIFrameElement>(null);
+  // Rota atual dentro do protótipo (muda quando a pessoa navega clicando no próprio protótipo).
+  const [rotaInterna, setRotaInterna] = useState<string | null>(null);
 
   if (!p) {
     return (
@@ -29,6 +31,22 @@ export function Visualizador({ catalogo, id, aba, tela }: { catalogo: Catalogo; 
   const projeto = programa?.projetos.find((x) => x.id === `${p.programa}/${p.projeto}`);
   const telaAtual = p.telas.find((t) => t.id === tela);
   const src = aba === "canvas" ? p.canvasUrl : aba === "mapa" ? p.mapaUrl : `${p.url}${telaAtual?.rota ?? ""}`;
+  const telaAtiva =
+    p.telas.find((t) => rotaInterna !== null && t.rota === rotaInterna)?.id ?? telaAtual?.id ?? p.telas[0]?.id ?? "";
+
+  // O protótipo é servido do mesmo endereço do Atlas, então dá para acompanhar a navegação dentro dele.
+  function acompanharQuadro() {
+    setRotaInterna(null);
+    try {
+      const janela = quadro.current?.contentWindow;
+      if (!janela) return;
+      const atualizar = () => setRotaInterna(janela.location.hash || null);
+      atualizar();
+      janela.addEventListener("hashchange", atualizar);
+    } catch {
+      /* outro endereço: só não acompanha */
+    }
+  }
 
   return (
     <div className="atlas-visualizador">
@@ -44,16 +62,6 @@ export function Visualizador({ catalogo, id, aba, tela }: { catalogo: Catalogo; 
           </span>
         </div>
         <Badge variant={STATUS_COR[p.status]} label={STATUS_ROTULO[p.status]} />
-        {aba === "prototipo" && p.telas.length > 0 && (
-          <div className="atlas-barra-tela">
-            <Select
-              label="Tela"
-              options={[{ value: INICIO, label: "Início" }, ...p.telas.map((t) => ({ value: t.id, label: t.titulo }))]}
-              value={telaAtual?.id ?? INICIO}
-              onChange={(v) => (window.location.hash = hrefPrototipo(p.id, "prototipo", v === INICIO ? "" : v))}
-            />
-          </div>
-        )}
         <a className="atlas-botao" href={src} target="_blank" rel="noreferrer">
           Nova aba ↗
         </a>
@@ -70,7 +78,16 @@ export function Visualizador({ catalogo, id, aba, tela }: { catalogo: Catalogo; 
           ]}
         />
       </div>
-      <iframe key={src} className="atlas-quadro" src={src} title={`${p.fluxo} · ${aba}`} />
+      <div className="atlas-area">
+        <iframe key={src} ref={quadro} className="atlas-quadro" src={src} title={`${p.fluxo} · ${aba}`} onLoad={acompanharQuadro} />
+        {aba === "prototipo" && p.telas.length > 0 && (
+          <PainelTelas
+            telas={p.telas}
+            ativa={telaAtiva}
+            aoEscolher={(idTela) => (window.location.hash = hrefPrototipo(p.id, "prototipo", idTela))}
+          />
+        )}
+      </div>
     </div>
   );
 }
