@@ -1,4 +1,5 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { SegmentedControl } from "selenesdk/src/components/SegmentedControl/SegmentedControl";
 import { Tabs } from "selenesdk/src/components/Tabs/Tabs";
 import { Badge } from "selenesdk/src/components/Badge/Badge";
 import { EmptyState } from "selenesdk/src/components/EmptyState/EmptyState";
@@ -6,12 +7,32 @@ import { hrefPrototipo, hrefProjeto, hrefRecentes, type Aba } from "./rotas";
 import { PainelTelas } from "./PainelTelas";
 import { STATUS_COR, STATUS_ROTULO, formatarData, type Catalogo } from "./tipos";
 
+type Tamanho = "desktop" | "mobile";
+const CHAVE_TAMANHO = "atlas:tamanho";
+
+function lerTamanho(): Tamanho {
+  try {
+    return localStorage.getItem(CHAVE_TAMANHO) === "mobile" ? "mobile" : "desktop";
+  } catch {
+    return "desktop";
+  }
+}
+
 /** Abre o protótipo dentro do Atlas, com abas Protótipo / Canvas / Mapa do fluxo. */
 export function Visualizador({ catalogo, id, aba, tela }: { catalogo: Catalogo; id: string; aba: Aba; tela: string }) {
   const p = catalogo.prototipos.find((x) => x.id === id);
   const quadro = useRef<HTMLIFrameElement>(null);
   // Rota atual dentro do protótipo (muda quando a pessoa navega clicando no próprio protótipo).
   const [rotaInterna, setRotaInterna] = useState<string | null>(null);
+  // Protótipo desktop é responsivo: dá para alternar entre tela cheia e largura de celular.
+  const [tamanho, setTamanho] = useState<Tamanho>(lerTamanho);
+  useEffect(() => {
+    try {
+      localStorage.setItem(CHAVE_TAMANHO, tamanho);
+    } catch {
+      /* sem armazenamento: só não lembra */
+    }
+  }, [tamanho]);
 
   if (!p) {
     return (
@@ -31,6 +52,8 @@ export function Visualizador({ catalogo, id, aba, tela }: { catalogo: Catalogo; 
   const projeto = programa?.projetos.find((x) => x.id === `${p.programa}/${p.projeto}`);
   const telaAtual = p.telas.find((t) => t.id === tela);
   const src = aba === "canvas" ? p.canvasUrl : aba === "mapa" ? p.mapaUrl : `${p.url}${telaAtual?.rota ?? ""}`;
+  // App é sempre mostrado numa moldura de celular; desktop, conforme o botão.
+  const emCelular = aba === "prototipo" && (p.dispositivo === "app" || tamanho === "mobile");
   const telaAtiva =
     p.telas.find((t) => rotaInterna !== null && t.rota === rotaInterna)?.id ?? telaAtual?.id ?? p.telas[0]?.id ?? "";
 
@@ -62,6 +85,17 @@ export function Visualizador({ catalogo, id, aba, tela }: { catalogo: Catalogo; 
           </span>
         </div>
         <Badge variant={STATUS_COR[p.status]} label={STATUS_ROTULO[p.status]} />
+        {aba === "prototipo" && p.dispositivo === "desktop" && (
+          <SegmentedControl
+            accessibleLabel="Tamanho da tela"
+            value={tamanho}
+            onChange={(v) => setTamanho(v as Tamanho)}
+            items={[
+              { value: "desktop", label: "Desktop", icon: "desktop" },
+              { value: "mobile", label: "Mobile", icon: "device-mobile" },
+            ]}
+          />
+        )}
         <a className="atlas-botao" href={src} target="_blank" rel="noreferrer">
           Nova aba ↗
         </a>
@@ -78,8 +112,10 @@ export function Visualizador({ catalogo, id, aba, tela }: { catalogo: Catalogo; 
           ]}
         />
       </div>
-      <div className="atlas-area">
-        <iframe key={src} ref={quadro} className="atlas-quadro" src={src} title={`${p.fluxo} · ${aba}`} onLoad={acompanharQuadro} />
+      <div className={`atlas-area${emCelular ? " atlas-area-celular" : ""}`}>
+        <div className="atlas-moldura">
+          <iframe key={src} ref={quadro} className="atlas-quadro" src={src} title={`${p.fluxo} · ${aba}`} onLoad={acompanharQuadro} />
+        </div>
         {aba === "prototipo" && p.telas.length > 0 && (
           <PainelTelas
             telas={p.telas}

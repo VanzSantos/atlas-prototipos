@@ -61,7 +61,12 @@ Regras:
   `build: {"comando": "..."}` = o comando, rodado na pasta, gera a saída (padrão `dist/`).
 - Rode `npm run validar` antes de finalizar e só siga se não houver ✖.
 - Não coloque autoria nem datas no `prototype.json`: elas vêm do histórico do git.
-- Inclua em `tags` o dispositivo: `desktop` ou `mobile`. Ele aparece como selo na miniatura.
+- Preencha `dispositivo` no `prototype.json`:
+  - `desktop`: o protótipo **precisa ser responsivo**, funcionando bem de 360px a 1440px ou mais.
+    Use `<meta name="viewport" content="width=device-width, initial-scale=1">`, larguras fluidas,
+    `box-sizing: border-box` e media queries. No Atlas, a pessoa alterna entre Desktop e Mobile para conferir.
+  - `app`: feito para celular, com largura de **390px**. Não precisa ser responsivo, porque o Atlas sempre
+    mostra numa moldura de celular.
 - A miniatura do catálogo é um print automático da tela inicial. Para escolher outra imagem, salve
   `miniatura.png` (1280×800) na pasta do protótipo.
 - **Nada de dados reais ou sensíveis**: os links de preview são públicos. Use dados fictícios.

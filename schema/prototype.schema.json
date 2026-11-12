@@ -11,6 +11,7 @@
     "projeto",
     "fluxo",
     "status",
+    "dispositivo",
     "donos",
     "entrada",
     "canvas",
@@ -61,6 +62,13 @@
         "arquivado"
       ],
       "description": "Situação do protótipo."
+    },
+    "dispositivo": {
+      "enum": [
+        "desktop",
+        "app"
+      ],
+      "description": "desktop = responsivo (o Atlas permite ver em desktop e em mobile). app = feito para celular, sem responsividade (o Atlas mostra numa moldura de celular)."
     },
     "donos": {
       "type": "array",

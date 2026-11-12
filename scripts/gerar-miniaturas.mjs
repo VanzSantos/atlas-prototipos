@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Tira um print da tela inicial de cada protótipo já montado no site e salva como
+// Tira um print da tela inicial de cada protótipo (no tamanho de desktop ou de celular) já montado no site e salva como
 // <site>/p/<programa>/<projeto>/<nome>/miniatura.png.
 //
 // Se a pasta do protótipo tiver um miniatura.png commitado, ele já foi copiado pelo
@@ -18,8 +18,11 @@ import { fileURLToPath } from "node:url";
 const RAIZ = resolve(fileURLToPath(import.meta.url), "..", "..");
 const i = process.argv.indexOf("--site");
 const SITE = resolve(RAIZ, i > -1 ? process.argv[i + 1] : "site");
-const LARGURA = 1280;
-const ALTURA = 800;
+// Tamanho da tela usada no print, por dispositivo.
+const TELAS = {
+  desktop: { width: 1280, height: 800, deviceScaleFactor: 1 },
+  app: { width: 390, height: 844, deviceScaleFactor: 2 },
+};
 
 const TIPOS = {
   ".html": "text/html; charset=utf-8",
@@ -46,7 +49,8 @@ for (const programa of pastas(join(SITE, "p")))
       if (existsSync(join(SITE, "p", id, "miniatura.png"))) continue;
       const json = join(RAIZ, "prototipos", id, "prototype.json");
       if (!existsSync(json)) continue;
-      pendentes.push({ id, entrada: JSON.parse(readFileSync(json, "utf8")).entrada });
+      const dados = JSON.parse(readFileSync(json, "utf8"));
+      pendentes.push({ id, entrada: dados.entrada, dispositivo: dados.dispositivo === "app" ? "app" : "desktop" });
     }
 
 if (!pendentes.length) {
@@ -86,8 +90,9 @@ await new Promise((ok) => servidor.listen(0, "127.0.0.1", ok));
 const base = `http://127.0.0.1:${servidor.address().port}`;
 
 // 4. Prints
-const pagina = await navegador.newPage({ viewport: { width: LARGURA, height: ALTURA } });
-for (const { id, entrada } of pendentes) {
+for (const { id, entrada, dispositivo } of pendentes) {
+  const { width, height, deviceScaleFactor } = TELAS[dispositivo];
+  const pagina = await navegador.newPage({ viewport: { width, height }, deviceScaleFactor, isMobile: dispositivo === "app" });
   try {
     await pagina.goto(`${base}/p/${id}/${entrada}`, { waitUntil: "networkidle", timeout: 20000 });
     await pagina.waitForTimeout(300);
@@ -96,6 +101,7 @@ for (const { id, entrada } of pendentes) {
   } catch (e) {
     console.warn(`⚠ miniatura ${id} não gerada: ${e.message.split("\n")[0]}`);
   }
+  await pagina.close();
 }
 
 await navegador.close();

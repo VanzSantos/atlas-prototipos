@@ -1,7 +1,7 @@
 import { Icon } from "selenesdk/src/components/Icon/Icon";
 import { EmptyState } from "selenesdk/src/components/EmptyState/EmptyState";
 import { hrefPrototipo } from "./rotas";
-import { STATUS_ROTULO, formatarData, type Catalogo, type Prototipo } from "./tipos";
+import { DISPOSITIVO_ROTULO, STATUS_ROTULO, formatarData, type Catalogo, type Prototipo } from "./tipos";
 
 interface Props {
   catalogo: Catalogo;
@@ -53,35 +53,23 @@ export function ListaPrototipos({ catalogo, sobretitulo, titulo, subtitulo, prot
   );
 }
 
-/** Dispositivo vem das tags: "desktop" ou "mobile". */
-const DISPOSITIVOS = { desktop: "Desktop", mobile: "Mobile" } as const;
-
-function dispositivo(p: Prototipo) {
-  const tag = p.tags.find((t): t is keyof typeof DISPOSITIVOS => t in DISPOSITIVOS);
-  return tag ? { tag, rotulo: DISPOSITIVOS[tag] } : null;
-}
-
 /**
  * Cartão no estilo "mídia + conteúdo". O cartão inteiro abre o protótipo no visualizador
  * do Atlas (o link do título se estende sobre o cartão), onde ficam Protótipo, Canvas e Mapa.
  */
 function Cartao({ prototipo: p, origem }: { prototipo: Prototipo; origem?: string }) {
-  const disp = dispositivo(p);
-
   return (
     <article className="atlas-cartao">
-      <div className="atlas-miniatura">
+      <div className={`atlas-miniatura atlas-miniatura-${p.dispositivo}`}>
         {p.miniatura ? <img src={p.miniatura} alt="" loading="lazy" /> : <span>Sem miniatura</span>}
         <span className={`atlas-selo atlas-selo-${p.status}`}>
           <span className="atlas-selo-ponto" aria-hidden="true" />
           {STATUS_ROTULO[p.status]}
         </span>
-        {disp && (
-          <span className="atlas-selo atlas-selo-dispositivo">
-            <Icon name={disp.tag === "mobile" ? "device-mobile" : "desktop"} size="small" color="currentColor" decorative />
-            {disp.rotulo}
-          </span>
-        )}
+        <span className="atlas-selo atlas-selo-dispositivo">
+          <Icon name={p.dispositivo === "app" ? "device-mobile" : "desktop"} size="small" color="currentColor" decorative />
+          {DISPOSITIVO_ROTULO[p.dispositivo]}
+        </span>
         <span className="atlas-play" aria-hidden="true">
           <svg viewBox="0 0 24 24">
             <path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z" />

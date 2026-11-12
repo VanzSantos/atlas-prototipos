@@ -1,3 +1,7 @@
+export type Dispositivo = "desktop" | "app";
+
+export const DISPOSITIVO_ROTULO: Record<Dispositivo, string> = { desktop: "Desktop", app: "App" };
+
 export type Status = "rascunho" | "em-andamento" | "em-revisao" | "aprovado" | "arquivado";
 
 export interface Tela {
@@ -26,6 +30,7 @@ export interface Prototipo {
   fluxo: string;
   descricao: string;
   status: Status;
+  dispositivo: Dispositivo;
   donos: string[];
   tags: string[];
   origem?: string;

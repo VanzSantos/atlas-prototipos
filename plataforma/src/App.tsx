@@ -93,7 +93,7 @@ function buscar(catalogo: Catalogo, termo: string): Prototipo[] {
   }
   return recentes(catalogo).filter((p) => {
     const alvo = normalizar(
-      [p.fluxo, p.descricao, p.modulo, nomes.get(p.programa), nomes.get(`${p.programa}/${p.projeto}`), ...p.tags, ...p.git.autores, ...p.donos].join(" ")
+      [p.fluxo, p.descricao, p.modulo, p.dispositivo === "app" ? "app mobile celular" : "desktop", nomes.get(p.programa), nomes.get(`${p.programa}/${p.projeto}`), ...p.tags, ...p.git.autores, ...p.donos].join(" ")
     );
     return termos.every((t) => alvo.includes(t));
   });
