@@ -12,6 +12,16 @@ export default defineConfig(({ command }) => ({
   // O SeleneSDK vem como código-fonte (TSX + CSS Modules), então o Vite compila junto.
   optimizeDeps: {
     exclude: ["selenesdk"],
-    include: ["react", "react-dom", "react-dom/client", "@floating-ui/react", "@phosphor-icons/react"],
+    // react/jsx-runtime precisa estar aqui: os componentes do SeleneSDK (excluídos acima) o importam,
+    // e sem isso o Vite às vezes o entrega sem preparar, deixando a página em branco.
+    include: [
+      "react",
+      "react/jsx-runtime",
+      "react/jsx-dev-runtime",
+      "react-dom",
+      "react-dom/client",
+      "@floating-ui/react",
+      "@phosphor-icons/react",
+    ],
   },
 }));
