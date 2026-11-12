@@ -24,3 +24,8 @@ Thumbs.db
 
 # Site montado pelo build (scripts/montar-site.mjs)
 site/
+
+# Arquivos temporários do CI
+_publicado/
+_prs.json
+_previews.json

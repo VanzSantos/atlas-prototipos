@@ -91,13 +91,16 @@ Nunca edite nem apague resumos antigos: cada arquivo é o registro de uma mudan�
     mostra numa moldura de celular.
 - A miniatura do catálogo é um print automático da tela inicial. Para escolher outra imagem, salve
   `miniatura.png` (1280×800) na pasta do protótipo.
-- **Nada de dados reais ou sensíveis**: os links de preview são públicos. Use dados fictícios.
+- **Nada de dados reais ou sensíveis**: o repositório e os links são públicos nesta fase. Use dados
+  fictícios e não use marcas ou nomes de clientes.
 
 ## Neutralidade de plataforma
 
 - O que é específico do GitHub fica **só** em `.github/workflows/`.
 - Scripts de build e validação ficam fora de `.github/` e não dependem de recursos do GitHub,
   para a migração ao Azure DevOps mexer só no deploy.
+- Antes de dizer que terminou, rode também `node scripts/verificar-historico.mjs --base origin/main`
+  (o mesmo teste que o PR vai fazer).
 
 ## Ao finalizar
 

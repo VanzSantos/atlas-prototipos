@@ -100,6 +100,15 @@ function Cartao({ prototipo: p, origem }: { prototipo: Prototipo; origem?: strin
           </span>
         </li>
       </ul>
+
+      {(p.situacao === "em-andamento" || p.emAndamento.length > 0) && (
+        <p className="atlas-cartao-andamento">
+          <span className="atlas-selo-ponto" aria-hidden="true" />
+          {p.situacao === "em-andamento"
+            ? "Alterado nesta mudança"
+            : `Mudança em andamento: PR #${p.emAndamento.map((pr) => pr.numero).join(", #")}`}
+        </p>
+      )}
     </article>
   );
 }

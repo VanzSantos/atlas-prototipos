@@ -1,0 +1,101 @@
+# Publicação da versão oficial (específico do GitHub; o resto do repositório é neutro).
+#
+# A cada mudança que entra na main (e quando um PR abre ou fecha):
+#   1. monta o site inteiro, trazendo de volta os prints antigos do histórico;
+#   2. grava os prints das telas dos protótipos alterados neste commit (só em push na main);
+#   3. inclui a lista de PRs abertos com preview ("Em andamento");
+#   4. publica na raiz da branch gh-pages, sem apagar os previews em pr-preview/.
+#
+# Na migração para o Azure DevOps, este arquivo vira o pipeline da main (ver docs/MIGRACAO.md).
+
+name: Publicar versão oficial
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write # publicar na branch gh-pages
+  pull-requests: read # listar PRs abertos
+
+concurrency:
+  group: gh-pages
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    name: Montar e publicar
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar a main (com histórico, para autoria e datas)
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Baixar a versão publicada (prints antigos e previews)
+        run: |
+          if git ls-remote --exit-code --heads origin gh-pages >/dev/null; then
+            git worktree add _publicado origin/gh-pages
+          else
+            mkdir -p _publicado
+          fi
+
+      - name: Preparar o Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            plataforma/package-lock.json
+
+      - name: Instalar dependências
+        run: |
+          git config --global url."https://github.com/".insteadOf "ssh://git@github.com/"
+          npm ci --no-audit --no-fund
+
+      - name: Listar PRs em andamento
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          OFICIAL=$(gh api "repos/${{ github.repository }}/pages" --jq .html_url 2>/dev/null || echo "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/")
+          gh pr list --state open --limit 100 --json number,title,headRefName,author,files > _prs.json
+          OFICIAL="$OFICIAL" node -e '
+            const fs = require("fs");
+            const base = process.env.OFICIAL.replace(/\/?$/, "/");
+            const prs = JSON.parse(fs.readFileSync("_prs.json", "utf8"))
+              .filter((pr) => fs.existsSync(`_publicado/pr-preview/pr-${pr.number}`))
+              .map((pr) => ({
+                numero: pr.number,
+                titulo: pr.title,
+                branch: pr.headRefName,
+                autor: pr.author?.name || pr.author?.login || null,
+                url: `${base}pr-preview/pr-${pr.number}/`,
+                pastas: pr.files.map((f) => f.path),
+              }));
+            fs.writeFileSync("_previews.json", JSON.stringify(prs, null, 2));
+            console.log(`${prs.length} PR(s) em andamento com preview.`);
+          '
+
+      - name: Montar o site oficial
+        env:
+          ATLAS_AMBIENTE: oficial
+          ATLAS_REF: main
+        run: |
+          PRINTS=""
+          if [ "${{ github.event_name }}" = "push" ]; then
+            PRINTS=$(node scripts/pastas-alteradas.mjs --base HEAD~1 | paste -sd, -)
+            echo "Prints do histórico para: ${PRINTS:-nenhum}"
+          fi
+          node scripts/montar-site.mjs --saida site --publicado _publicado --previews _previews.json --prints "$PRINTS"
+
+      - name: Publicar (sem apagar os previews)
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: site
+          branch: gh-pages
+          clean: true
+          clean-exclude: pr-preview/
+          force: false

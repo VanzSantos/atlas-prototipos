@@ -60,7 +60,10 @@ Guia curto para quem vai adicionar ou mudar um protótipo. Não precisa saber Gi
    ```bash
    git push -u origin HEAD
    ```
-7. **Abra o PR** no site e preencha o modelo. O preview aparece como comentário no PR.
+7. **Abra o PR** no site e preencha o modelo. Em poucos minutos, o GitHub:
+   - confere tudo (o PR fica vermelho se faltar algum campo ou o resumo no histórico);
+   - comenta no PR um **link de preview** com a sua versão;
+   - mostra o PR na seção **Em andamento** da versão oficial do Atlas.
 8. **Peça revisão.** O PR precisa de build passando e 1 aprovação. O merge é feito como *squash*
    e a branch é apagada sozinha depois.
 

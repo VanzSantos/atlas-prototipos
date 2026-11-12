@@ -55,6 +55,8 @@ export interface Prototipo {
   miniatura: string | null;
   git: Historico;
   historico: EntradaHistorico[];
+  /** PRs abertos que mexem neste protótipo (só na versão oficial). */
+  emAndamento: { numero: number; titulo: string; autor: string | null; url: string }[];
 }
 
 export interface Projeto {
@@ -75,6 +77,7 @@ export interface PreviewEmAndamento {
   numero: number;
   titulo: string;
   branch: string;
+  autor?: string | null;
   url: string;
   pastas: string[];
 }

@@ -853,3 +853,75 @@ a.atlas-historico-pr:hover {
   border: 1px solid var(--borda-base);
   border-radius: var(--raio-p);
 }
+
+/* Em andamento: PRs abertos e protótipos alterados */
+.atlas-cartao-andamento {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: var(--espaco-p) var(--espaco-xp) 0;
+  color: var(--texto-secundario);
+  font-size: var(--texto-micro-size);
+}
+
+.atlas-cartao-andamento .atlas-selo-ponto {
+  background: #d97706;
+}
+
+.atlas-aviso-preview {
+  margin: var(--espaco-m) var(--espaco-g) 0;
+  padding: var(--espaco-p) var(--espaco-m);
+  border: 1px solid var(--borda-aviso);
+  border-radius: var(--raio-p);
+  background: var(--fundo-aviso);
+  color: var(--texto-primario);
+  font-size: var(--texto-p-size);
+}
+
+.atlas-andamento {
+  padding: var(--espaco-g) var(--espaco-g) 0;
+}
+
+.atlas-andamento-titulo {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-p);
+  margin: 0 0 var(--espaco-p);
+  font-family: var(--texto-m-forte-family);
+  font-size: var(--texto-m-forte-size);
+  font-weight: var(--texto-m-forte-weight);
+}
+
+.atlas-andamento-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--espaco-p);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.atlas-andamento-lista a {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--espaco-p) var(--espaco-m);
+  border: 1px dashed var(--borda-base);
+  border-radius: 12px;
+  background: var(--fundo-superficie);
+  text-decoration: none;
+}
+
+:root[data-theme="dark"] .atlas-andamento-lista a {
+  background: var(--fundo-secundario);
+}
+
+.atlas-andamento-lista a:hover {
+  border-style: solid;
+}
+
+.atlas-andamento-pr {
+  color: #d97706;
+  font-size: var(--texto-micro-size);
+  font-weight: 600;
+}
