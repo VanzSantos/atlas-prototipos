@@ -176,5 +176,8 @@ function Navegacao({ catalogo, rota }: { catalogo: Catalogo; rota: Rota }) {
     </div>
   );
 
-  return <SideNav items={itens} openKeys={abertos} onOpenKeysChange={setAbertos} accessibleLabel="Navegação do Atlas" header={cabecalho} />;
+  // "Programas" é só o título da categoria: fica sempre aberto. Programas e projetos recolhem.
+  const mudarAbertos = (chaves: string[]) => setAbertos(chaves.includes("programas") ? chaves : ["programas", ...chaves]);
+
+  return <SideNav items={itens} openKeys={abertos} onOpenKeysChange={mudarAbertos} accessibleLabel="Navegação do Atlas" header={cabecalho} />;
 }

@@ -413,3 +413,28 @@ a {
   flex: 1;
   min-width: 0;
 }
+
+/* "Programas" na barra lateral é título de categoria, não grupo recolhível.
+   O SideNav monta o id do botão como <prefixo>-<key>-header. */
+[id$="-programas-header"] {
+  pointer-events: none;
+  margin-top: var(--espaco-m);
+  padding-bottom: var(--espaco-xp);
+}
+
+[id$="-programas-header"] > span:last-child {
+  display: none;
+}
+
+[id$="-programas-header"] > span:first-child {
+  color: var(--texto-secundario);
+  font-size: var(--texto-micro-size);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Os programas ficam alinhados ao título, sem recuo extra. */
+[id$="-programas-panel"] > ul {
+  padding-left: 0 !important;
+}
