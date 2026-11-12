@@ -50,6 +50,18 @@ Quando uma decisão mudar, não apague: marque como **Substituída** e adicione 
 | D21 | `scripts/montar-site.mjs` monta o site inteiro (`site/`): plataforma, `catalogo.json` e `p/<projeto>/<nome>/`. | O CI só precisa rodar `npm run build` e publicar `site/`. Isso é igual no GitHub e no Azure. |
 | D22 | O catálogo aceita uma lista de PRs abertos (`--previews`), fornecida pelo CI. | "Em andamento" vem do CI (passo 6), sem lista editada à mão. |
 
+## Decididas em 12/11/2026 (passo 5, revisão da estrutura)
+
+| # | Decisão | Por quê |
+|---|---------|---------|
+| D23 | Hierarquia **Programa → Projeto → Protótipo (um fluxo)**, nas pastas `prototipos/<programa>/<projeto>/<nome>/`. Substitui a parte de "projeto" da D14. | É como a empresa se organiza. A pasta mostra a hierarquia e o CODEOWNERS pode dar dono por programa inteiro. |
+| D24 | O campo `programa` passou a ser obrigatório. O `modulo` ficou opcional, e o `titulo` saiu: o nome exibido é o `fluxo`. | Um protótipo é um fluxo, então não faz sentido repetir o nome. O módulo fica só como filtro. |
+| D25 | Os nomes de exibição ficam em `programa.json` e `projeto.json`, cada um na sua pasta. | Não é uma lista central: cada arquivo pertence à sua pasta e muda pouco. Sem esses arquivos, o nome vem da pasta. |
+| D26 | Três peças obrigatórias por protótipo: o **protótipo navegável**, o **canvas** (`canvas/index.html`) e o **mapa do fluxo** (`mapa/index.html`), feitas em paralelo pela IA. Em rascunho, a falta delas só gera aviso. | O canvas é usado para anotações e detalhamento, e o mapa mostra toda a navegação. O AGENTS.md obriga a atualizar as três juntas. |
+| D27 | A **miniatura** é um print automático da tela inicial (1280×800), feito no build com o Chrome via `playwright-core`. Um `miniatura.png` na pasta substitui o print. Sem Chrome, o build segue sem miniatura. | A grade fica sempre atualizada sem esforço, e a pessoa ainda pode escolher outra imagem. |
+| D28 | Barra lateral: **Recentes** (os 30 alterados por último), depois a categoria **Programas** → programas → projetos. A página do projeto tem **Miniaturas** e **Lista**, mostrando fluxo, status, data de criação, data da última alteração e quem alterou. A escolha de vista fica no link e é lembrada no navegador. | Pedido da responsável pelo produto (12/11/2026). |
+| D29 | Datas e autoria vêm do git. A data de criação segue o `prototype.json` mesmo quando a pasta é movida ou renomeada. | Mover uma pasta não pode "zerar" a data de criação. |
+
 ## Pendências
 
 ### P1 — Repo privado × GitHub Pages

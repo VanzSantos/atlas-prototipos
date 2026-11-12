@@ -44,7 +44,10 @@ function historico(caminho) {
       return { sha, autor, data };
     });
   if (!commits.length) return { criadoEm: null, criadoPor: null, atualizadoEm: null, alteradoPor: null, ultimoCommit: null, autores: [] };
-  const primeiro = commits.at(-1);
+  // Data de criação segue o prototype.json mesmo se a pasta foi renomeada ou movida.
+  const [shaCriacao, autorCriacao, dataCriacao] =
+    git(["log", "--follow", "--format=%h%x1f%an%x1f%aI", "--", `${caminho}/prototype.json`]).split("\n").filter(Boolean).at(-1)?.split("\x1f") ?? [];
+  const primeiro = dataCriacao ? { sha: shaCriacao, autor: autorCriacao, data: dataCriacao } : commits.at(-1);
   const ultimo = commits[0];
   return {
     criadoEm: primeiro.data,

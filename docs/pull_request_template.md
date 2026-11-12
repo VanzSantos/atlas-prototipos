@@ -4,7 +4,7 @@
 
 ## Onde
 
-- Pasta: `prototipos/<projeto>/<nome>/`
+- Pasta: `prototipos/<programa>/<projeto>/<nome>/`
 - Tipo: <!-- novo protótipo / ajuste de protótipo / plataforma / documentação -->
 
 ## Como revisar
@@ -14,6 +14,7 @@
 ## Checklist
 
 - [ ] Mexi só na minha pasta (ou a mudança de outras áreas foi combinada)
+- [ ] Protótipo, canvas e mapa do fluxo estão atualizados juntos
 - [ ] O `prototype.json` está atualizado
 - [ ] Usei só dados fictícios (o preview é público)
 - [ ] Rodei a validação localmente

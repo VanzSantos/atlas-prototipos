@@ -11,7 +11,7 @@ simples, um passo por vez, e diga qual é o próximo passo.
 
 ## Escopo: onde mexer
 
-- Trabalho em protótipo: **só** dentro de `prototipos/<projeto>/<nome>/`.
+- Trabalho em protótipo: **só** dentro de `prototipos/<programa>/<projeto>/<nome>/`.
 - Não altere pastas de outros protótipos, `plataforma/`, `.github/`, `CODEOWNERS` ou arquivos da
   raiz, a menos que a pessoa peça isso explicitamente.
 - **Nunca** crie ou edite uma lista central de protótipos. O catálogo é gerado lendo os
@@ -22,7 +22,7 @@ simples, um passo por vez, e diga qual é o próximo passo.
 
 1. Nunca commite na `main`. Antes de mudar qualquer coisa, confira a branch atual.
    Se estiver na `main`, atualize (`git switch main && git pull`) e crie a branch:
-   `prototipo/<projeto>/<nome>` (protótipo), `plataforma/<descricao>` ou `docs/<descricao>`.
+   `prototipo/<programa>/<projeto>/<nome>` (protótipo), `plataforma/<descricao>` ou `docs/<descricao>`.
 2. Uma mudança = uma branch = um PR. Não misture protótipos.
 3. Commits curtos no formato `<nome ou area>: <o que mudou>`.
 4. **Peça confirmação antes de:** `git push`, abrir PR, apagar arquivos ou branches, e qualquer
@@ -33,12 +33,36 @@ simples, um passo por vez, e diga qual é o próximo passo.
 ## Protótipo: contrato
 
 - Toda pasta de protótipo tem um `prototype.json` válido, conforme `schema/prototype.schema.json`.
-  Use `prototipos/exemplos/` como modelo.
+  Use `prototipos/exemplo/` como modelo. Os campos `programa` e `projeto` são iguais aos nomes das pastas.
+- Programa novo: crie `prototipos/<programa>/programa.json` com o nome de exibição. Projeto novo:
+  `prototipos/<programa>/<projeto>/projeto.json` (ver `schema/grupo.schema.json`).
+
+## Protótipo: as três peças (sempre juntas)
+
+Todo protótipo tem **três peças** que você cria e mantém **em paralelo**, no mesmo PR:
+
+1. **Protótipo navegável**: a entrada (`entrada`, normalmente `index.html`), que roda no navegador.
+2. **Canvas** (`canvas/index.html`): as mesmas telas, **estáticas**, lado a lado, com notas de
+   regra, conteúdo, dúvidas e detalhamentos, para anotação e revisão.
+3. **Mapa do fluxo** (`mapa/index.html`): flowmap/sitemap com **toda a navegação** do fluxo
+   (telas, caminhos, rótulos das ações, e o que ainda não foi prototipado em tracejado).
+
+Regras:
+- Toda tela nova ou alterada no protótipo navegável aparece também no canvas e no mapa.
+- Todo caminho novo (botão, link, voltar, erro) aparece no mapa.
+- Se alguma peça não puder ser atualizada agora, diga isso à pessoa antes de finalizar.
+- Em `status: "rascunho"`, o validador só avisa se canvas ou mapa faltarem; nos outros status, falha.
+- Use os exemplos em `prototipos/exemplo/` como modelo de canvas e mapa.
+
+## Protótipo: build e validação
+
 - O protótipo precisa gerar uma saída **estática** em `dist/` (HTML, CSS, JS e imagens).
 - `build: null` = a pasta já é estática e o arquivo de `entrada` existe nela.
   `build: {"comando": "..."}` = o comando, rodado na pasta, gera a saída (padrão `dist/`).
 - Rode `npm run validar` antes de finalizar e só siga se não houver ✖.
 - Não coloque autoria nem datas no `prototype.json`: elas vêm do histórico do git.
+- A miniatura do catálogo é um print automático da tela inicial. Para escolher outra imagem, salve
+  `miniatura.png` (1280×800) na pasta do protótipo.
 - **Nada de dados reais ou sensíveis**: os links de preview são públicos. Use dados fictícios.
 
 ## Neutralidade de plataforma
