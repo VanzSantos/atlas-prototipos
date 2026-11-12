@@ -61,6 +61,7 @@ Regras:
   `build: {"comando": "..."}` = o comando, rodado na pasta, gera a saída (padrão `dist/`).
 - Rode `npm run validar` antes de finalizar e só siga se não houver ✖.
 - Não coloque autoria nem datas no `prototype.json`: elas vêm do histórico do git.
+- Inclua em `tags` o dispositivo: `desktop` ou `mobile`. Ele aparece como selo na miniatura.
 - A miniatura do catálogo é um print automático da tela inicial. Para escolher outra imagem, salve
   `miniatura.png` (1280×800) na pasta do protótipo.
 - **Nada de dados reais ou sensíveis**: os links de preview são públicos. Use dados fictícios.

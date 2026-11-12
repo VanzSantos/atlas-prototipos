@@ -7,7 +7,7 @@ import { Badge } from "selenesdk/src/components/Badge/Badge";
 import { EmptyState } from "selenesdk/src/components/EmptyState/EmptyState";
 import { Button } from "selenesdk/src/components/Button/Button";
 import { hrefPrototipo, lembrarVista, type CampoFiltro, type Filtros, type Vista } from "./rotas";
-import { STATUS_COR, STATUS_ROTULO, formatarData, formatarDataCurta, type Catalogo, type Prototipo, type Status } from "./tipos";
+import { STATUS_COR, STATUS_ROTULO, formatarData, type Catalogo, type Prototipo, type Status } from "./tipos";
 
 /** O Select não mostra rótulo para valor vazio, então "Todos" usa um valor próprio. */
 const TODOS = "*";
@@ -154,10 +154,16 @@ function Acoes({ prototipo: p }: { prototipo: Prototipo }) {
  * Cartão no estilo "mídia + conteúdo". O cartão inteiro abre o protótipo no visualizador
  * do Atlas (o link do título se estende sobre o cartão), onde ficam Protótipo, Canvas e Mapa.
  */
+/** Dispositivo vem das tags: "desktop" ou "mobile". */
+const DISPOSITIVOS = { desktop: "Desktop", mobile: "Mobile" } as const;
+
+function dispositivo(p: Prototipo) {
+  const tag = p.tags.find((t): t is keyof typeof DISPOSITIVOS => t in DISPOSITIVOS);
+  return tag ? { tag, rotulo: DISPOSITIVOS[tag] } : null;
+}
+
 function Cartao({ prototipo: p, origem }: { prototipo: Prototipo; origem?: string }) {
-  const MAX_TAGS = 2;
-  const tags = p.tags.slice(0, MAX_TAGS);
-  const restantes = p.tags.length - tags.length;
+  const disp = dispositivo(p);
 
   return (
     <article className="atlas-cartao">
@@ -167,6 +173,12 @@ function Cartao({ prototipo: p, origem }: { prototipo: Prototipo; origem?: strin
           <span className="atlas-selo-ponto" aria-hidden="true" />
           {STATUS_ROTULO[p.status]}
         </span>
+        {disp && (
+          <span className="atlas-selo atlas-selo-dispositivo">
+            <Icon name={disp.tag === "mobile" ? "device-mobile" : "desktop"} size="small" color="currentColor" decorative />
+            {disp.rotulo}
+          </span>
+        )}
         <span className="atlas-play" aria-hidden="true">
           <svg viewBox="0 0 24 24">
             <path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z" />
@@ -181,39 +193,31 @@ function Cartao({ prototipo: p, origem }: { prototipo: Prototipo; origem?: strin
             {p.fluxo}
           </a>
         </h2>
-        <p className="atlas-cartao-descricao">{p.descricao || (p.modulo ? `Módulo ${p.modulo}` : "Sem descrição")}</p>
       </div>
 
       <dl className="atlas-cartao-meta">
-        <div title={`Criado em ${formatarData(p.git.criadoEm)}`}>
+        <div>
           <dt>
-            <Icon name="calendar" size="small" color="var(--icone-secundario)" accessibleLabel="Criado em" decorative={false} />
+            <Icon name="star" size="small" color="var(--icone-secundario)" decorative />
+            Criado em
           </dt>
-          <dd>{formatarDataCurta(p.git.criadoEm)}</dd>
+          <dd>{formatarData(p.git.criadoEm)}</dd>
         </div>
-        <div title={`Alterado em ${formatarData(p.git.atualizadoEm)}`}>
+        <div>
           <dt>
-            <Icon name="clock" size="small" color="var(--icone-secundario)" accessibleLabel="Alterado em" decorative={false} />
+            <Icon name="clock" size="small" color="var(--icone-secundario)" decorative />
+            Atualizado em
           </dt>
-          <dd>{formatarDataCurta(p.git.atualizadoEm)}</dd>
+          <dd>{formatarData(p.git.atualizadoEm)}</dd>
         </div>
-        <div title={`Alterado por ${p.git.alteradoPor ?? "—"}`}>
+        <div>
           <dt>
-            <Icon name="user" size="small" color="var(--icone-secundario)" accessibleLabel="Alterado por" decorative={false} />
+            <Icon name="user" size="small" color="var(--icone-secundario)" decorative />
+            Atualizado por
           </dt>
           <dd>{p.git.alteradoPor ?? "—"}</dd>
         </div>
       </dl>
-
-      {p.tags.length > 0 && (
-        <ul className="atlas-cartao-tags" aria-label="Tags">
-          {tags.map((t) => (
-            <li key={t}>{t}</li>
-          ))}
-          {restantes > 0 && <li title={p.tags.slice(MAX_TAGS).join(", ")}>+{restantes}</li>}
-        </ul>
-      )}
-
     </article>
   );
 }
