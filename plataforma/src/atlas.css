@@ -141,14 +141,10 @@ a {
 }
 
 .atlas-marca-icone {
-  width: 32px;
-  height: 32px;
-  color: var(--acao-primaria);
+  width: 24px;
+  height: 24px;
+  color: currentColor;
   flex-shrink: 0;
-}
-
-:root[data-theme="dark"] .atlas-marca-icone {
-  color: var(--acao-secundaria);
 }
 
 /* Página de lista */

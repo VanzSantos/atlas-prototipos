@@ -14,5 +14,5 @@ navegável, o canvas e o mapa do fluxo.
 | `src/App.tsx` | Carrega o catálogo; barra lateral com busca, Recentes e Programas → Projetos |
 | `src/ListaPrototipos.tsx` | Grade de cartões (miniatura, status, dispositivo, autoria e datas) |
 | `src/Visualizador.tsx` | Abre protótipo, canvas ou mapa dentro do Atlas, com troca de tela |
-| `src/Marca.tsx` | Marca do Atlas (titã sustentando o globo) |
+| `src/Marca.tsx` | Marca do Atlas (globo simples na cor do texto) |
 | `src/rotas.ts` | Navegação por hash (links compartilháveis) |
