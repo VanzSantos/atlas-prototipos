@@ -1,0 +1,6 @@
+{
+  "$schema": "../../../schema/grupo.schema.json",
+  "versao": 1,
+  "nome": "Backoffice",
+  "descricao": "Ferramentas internas das equipes."
+}

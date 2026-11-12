@@ -12,5 +12,8 @@
     "catalogo": "node scripts/gerar-catalogo.mjs",
     "dev": "node scripts/montar-site.mjs --saida plataforma/gerado --sem-plataforma && npm --prefix plataforma run dev",
     "build": "node scripts/montar-site.mjs --saida site"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.56.1"
   }
 }

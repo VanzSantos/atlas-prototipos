@@ -1,0 +1,6 @@
+{
+  "$schema": "../../../schema/grupo.schema.json",
+  "versao": 1,
+  "nome": "Portal do Cliente",
+  "descricao": "Jornadas do cliente no app e no site."
+}

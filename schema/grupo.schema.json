@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "grupo.schema.json",
+  "title": "Programa ou projeto do Atlas",
+  "description": "Nome de exibição de um programa (prototipos/<programa>/programa.json) ou projeto (prototipos/<programa>/<projeto>/projeto.json).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "versao",
+    "nome"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "versao": {
+      "const": 1
+    },
+    "nome": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 60,
+      "description": "Nome que aparece na barra lateral."
+    },
+    "descricao": {
+      "type": "string",
+      "maxLength": 300
+    },
+    "donos": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})$"
+      }
+    }
+  }
+}

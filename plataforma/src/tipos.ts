@@ -6,29 +6,49 @@ export interface Tela {
   rota?: string;
 }
 
+export interface Historico {
+  criadoEm: string | null;
+  criadoPor: string | null;
+  atualizadoEm: string | null;
+  alteradoPor: string | null;
+  ultimoCommit: string | null;
+  autores: string[];
+}
+
 export interface Prototipo {
-  id: string;
+  id: string; // programa/projeto/nome
   nome: string;
   caminho: string;
-  url: string;
   situacao: "oficial" | "em-andamento";
-  titulo: string;
-  descricao: string;
+  programa: string;
   projeto: string;
   modulo: string;
   fluxo: string;
+  descricao: string;
   status: Status;
   donos: string[];
   tags: string[];
-  entrada: string;
   origem?: string;
   telas: Tela[];
-  git: {
-    autores: { nome: string; commits: number }[];
-    criadoEm: string | null;
-    atualizadoEm: string | null;
-    ultimoCommit: string | null;
-  };
+  url: string;
+  canvasUrl: string;
+  mapaUrl: string;
+  miniatura: string | null;
+  git: Historico;
+}
+
+export interface Projeto {
+  id: string; // programa/projeto
+  nome: string;
+  descricao: string;
+  total: number;
+}
+
+export interface Programa {
+  id: string;
+  nome: string;
+  descricao: string;
+  projetos: Projeto[];
 }
 
 export interface PreviewEmAndamento {
@@ -45,6 +65,7 @@ export interface Catalogo {
   ambiente: string;
   ref: string | null;
   commit: string | null;
+  programas: Programa[];
   prototipos: Prototipo[];
   emAndamento: PreviewEmAndamento[];
 }
@@ -64,3 +85,7 @@ export const STATUS_COR: Record<Status, "neutral" | "info" | "warning" | "succes
   aprovado: "success",
   arquivado: "dark",
 };
+
+export function formatarData(iso: string | null): string {
+  return iso ? new Date(iso).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" }) : "—";
+}

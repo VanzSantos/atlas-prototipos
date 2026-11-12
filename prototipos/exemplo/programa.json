@@ -1,0 +1,7 @@
+{
+  "$schema": "../../schema/grupo.schema.json",
+  "versao": 1,
+  "nome": "Programa Exemplo",
+  "descricao": "Programa fictício para mostrar como o Atlas organiza os protótipos.",
+  "donos": ["VanzSantos"]
+}

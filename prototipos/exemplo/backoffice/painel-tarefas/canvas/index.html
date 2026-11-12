@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Canvas · Acompanhar tarefas</title>
+  <style>
+    body { margin: 0; font-family: system-ui, sans-serif; background: #e9e9ee; color: #1d1d1f; }
+    header { padding: 16px 24px; background: #fff; border-bottom: 1px solid #d2d2d7; }
+    header h1 { margin: 0; font-size: 18px; } header p { margin: 4px 0 0; color: #6e6e73; font-size: 13px; }
+    .quadro { display: flex; gap: 32px; padding: 32px; align-items: flex-start; flex-wrap: wrap; }
+    .tela h2 { font-size: 13px; color: #6e6e73; margin: 0 0 8px; }
+    .desktop { width: 640px; background: #fff; border: 1px solid #c7c7cc; border-radius: 8px; padding: 24px; box-sizing: border-box; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; } th, td { text-align: left; padding: 8px; border-bottom: 1px solid #e5e5ea; }
+    .nota { width: 220px; padding: 12px; background: #fff7c2; border-radius: 4px; font-size: 13px; box-shadow: 0 2px 6px #0002; margin-bottom: 12px; }
+    .nota b { display: block; margin-bottom: 4px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Canvas · Acompanhar tarefas</h1>
+    <p>Telas estáticas com anotações. Atualize este arquivo junto com o protótipo navegável.</p>
+  </header>
+  <main class="quadro">
+    <section class="tela">
+      <h2>1 · Painel</h2>
+      <div class="desktop">
+        <h3>Painel de tarefas</h3>
+        <table>
+          <tr><th>Tarefa</th><th>Responsável</th><th>Status</th></tr>
+          <tr><td>Revisar fluxo de cadastro</td><td>Pessoa A</td><td>Em andamento</td></tr>
+          <tr><td>Testar com usuários</td><td>Pessoa B</td><td>A fazer</td></tr>
+        </table>
+      </div>
+    </section>
+    <aside>
+      <div class="nota"><b>Regra</b>Ordenar por prazo; atrasadas no topo.</div>
+      <div class="nota"><b>Próximo passo</b>Adicionar filtro por responsável.</div>
+    </aside>
+  </main>
+</body>
+</html>
