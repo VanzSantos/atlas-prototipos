@@ -3,8 +3,9 @@
 Plataforma central de protótipos. Reúne num só lugar todos os protótipos feitos com IA e com
 código, que hoje estão espalhados em links e repositórios diferentes.
 
-> ⚠️ **Repositório privado, mas os links publicados são públicos.** Nunca coloque dados reais de
-> clientes, pacientes ou informações sensíveis em um protótipo. Veja [DECISOES.md](DECISOES.md).
+> ⚠️ **Repositório e links públicos (fase de teste).** Qualquer pessoa pode ver o código e os
+> protótipos. Nunca coloque dados reais de clientes, pacientes, marcas de clientes ou informações
+> internas. Veja [DECISOES.md](DECISOES.md) (D35).
 
 ## Como funciona
 

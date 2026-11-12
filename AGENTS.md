@@ -91,7 +91,8 @@ Nunca edite nem apague resumos antigos: cada arquivo é o registro de uma mudan�
     mostra numa moldura de celular.
 - A miniatura do catálogo é um print automático da tela inicial. Para escolher outra imagem, salve
   `miniatura.png` (1280×800) na pasta do protótipo.
-- **Nada de dados reais ou sensíveis**: os links de preview são públicos. Use dados fictícios.
+- **Nada de dados reais ou sensíveis**: o repositório e os links são públicos nesta fase. Use dados
+  fictícios e não use marcas ou nomes de clientes.
 
 ## Neutralidade de plataforma
 
