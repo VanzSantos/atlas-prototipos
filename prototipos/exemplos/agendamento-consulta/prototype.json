@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schema/prototype.schema.json",
+  "versao": 1,
+  "titulo": "Agendamento de consulta",
+  "descricao": "Exemplo de protótipo estático: HTML puro, sem build, com duas telas por hash.",
+  "projeto": "exemplos",
+  "modulo": "Atendimento",
+  "fluxo": "Agendar consulta",
+  "status": "em-andamento",
+  "donos": ["VanzSantos"],
+  "tags": ["exemplo", "mobile", "agenda"],
+  "entrada": "index.html",
+  "origem": "claude",
+  "build": null,
+  "telas": [
+    { "id": "escolher-data", "titulo": "Escolher data", "rota": "#/data" },
+    { "id": "confirmar", "titulo": "Confirmação", "rota": "#/confirmar" }
+  ]
+}

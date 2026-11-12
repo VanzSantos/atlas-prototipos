@@ -1,0 +1,12 @@
+{
+  "name": "atlas-prototipos",
+  "private": true,
+  "description": "Atlas — plataforma central de protótipos",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "validar": "node scripts/validar-prototipos.mjs"
+  }
+}

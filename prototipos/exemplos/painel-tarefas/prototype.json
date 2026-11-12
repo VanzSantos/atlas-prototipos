@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../schema/prototype.schema.json",
+  "versao": 1,
+  "titulo": "Painel de tarefas",
+  "descricao": "Exemplo de protótipo com build: o comando gera a saída estática em dist/.",
+  "projeto": "exemplos",
+  "modulo": "Gestão",
+  "fluxo": "Acompanhar tarefas",
+  "status": "rascunho",
+  "donos": ["VanzSantos"],
+  "tags": ["exemplo", "desktop"],
+  "entrada": "index.html",
+  "origem": "codigo",
+  "build": { "comando": "node build.mjs", "saida": "dist" }
+}

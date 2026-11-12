@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "prototype.schema.json",
+  "title": "Protótipo do Atlas",
+  "description": "Metadados de um protótipo. Fica em prototipos/<projeto>/<nome>/prototype.json.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["versao", "titulo", "projeto", "modulo", "fluxo", "status", "donos", "entrada"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Caminho para este schema (ajuda o editor a autocompletar)."
+    },
+    "versao": {
+      "description": "Versão do contrato. Hoje é sempre 1.",
+      "const": 1
+    },
+    "titulo": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 80,
+      "description": "Nome que aparece no catálogo."
+    },
+    "descricao": {
+      "type": "string",
+      "maxLength": 300,
+      "description": "Uma ou duas frases sobre o protótipo."
+    },
+    "projeto": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "Igual ao nome da pasta do projeto (minúsculas, com hífen)."
+    },
+    "modulo": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 60,
+      "description": "Módulo dentro do projeto. Ex.: Atendimento."
+    },
+    "fluxo": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 60,
+      "description": "Fluxo dentro do módulo. Ex.: Agendar consulta."
+    },
+    "status": {
+      "enum": ["rascunho", "em-andamento", "em-revisao", "aprovado", "arquivado"],
+      "description": "Situação do protótipo."
+    },
+    "donos": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "Usuários do GitHub responsáveis (sem @).",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})$"
+      }
+    },
+    "tags": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "Palavras para filtrar (minúsculas, com hífen).",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      }
+    },
+    "entrada": {
+      "type": "string",
+      "pattern": "^(?!/)(?!.*\\.\\.)[^\\s]+\\.html$",
+      "description": "Arquivo HTML de entrada, relativo à saída estática. Normalmente index.html."
+    },
+    "origem": {
+      "enum": ["claude", "codex", "figma-make", "codigo", "outro"],
+      "description": "Como o protótipo foi feito."
+    },
+    "build": {
+      "type": ["object", "null"],
+      "description": "null = a pasta já é estática. Objeto = comando que gera a saída estática.",
+      "additionalProperties": false,
+      "required": ["comando"],
+      "properties": {
+        "comando": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Rodado dentro da pasta do protótipo. Ex.: npm run build."
+        },
+        "saida": {
+          "type": "string",
+          "pattern": "^(?!/)(?!.*\\.\\.)[^\\s]+$",
+          "description": "Pasta gerada pelo comando, relativa ao protótipo. Padrão: dist."
+        }
+      }
+    },
+    "telas": {
+      "type": "array",
+      "description": "Telas do fluxo, na ordem. Permite abrir direto numa tela.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "titulo"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "titulo": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 60
+          },
+          "rota": {
+            "type": "string",
+            "pattern": "^#",
+            "description": "Rota por hash dentro do protótipo. Ex.: #/confirmar."
+          }
+        }
+      }
+    }
+  }
+}

@@ -34,7 +34,11 @@ Guia curto para quem vai adicionar ou mudar um protótipo. Não precisa saber Gi
    git switch -c prototipo/<projeto>/<nome>
    ```
 3. **Trabalhe na sua pasta** `prototipos/<projeto>/<nome>/` e mantenha o `prototype.json` atualizado.
-4. **Valide localmente** (comando definido no passo 4 do projeto; ficará descrito aqui).
+4. **Valide localmente** (precisa do Node 20 ou mais novo):
+   ```bash
+   npm run validar
+   ```
+   Se aparecer ✖, a mensagem diz qual campo corrigir no `prototype.json`.
 5. **Salve e envie:**
    ```bash
    git add prototipos/<projeto>/<nome>
