@@ -86,6 +86,11 @@ export function Visualizador({ catalogo, id, aba, tela }: { catalogo: Catalogo; 
           </span>
         </div>
         <Badge variant={STATUS_COR[p.status]} label={STATUS_ROTULO[p.status]} />
+        {p.emAndamento.map((pr) => (
+          <a key={pr.numero} className="atlas-botao atlas-botao-sutil" href={`${pr.url}#/p/${p.id}`} target="_blank" rel="noreferrer" title={pr.titulo}>
+            Em andamento: PR #{pr.numero} ↗
+          </a>
+        ))}
         {aba === "prototipo" && p.dispositivo === "desktop" && (
           <SegmentedControl
             accessibleLabel="Tamanho da tela"

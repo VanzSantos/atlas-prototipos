@@ -8,8 +8,12 @@
 //
 // Uso:
 //   node scripts/gerar-catalogo.mjs --saida <arquivo.json> [--site <pasta>] [--previews <arquivo.json>]
+//        [--alterados id,id] [--oficial-url <url>] [--publicado <pasta>]
 //
-// --site (opcional): pasta do site montado, para saber quais miniaturas existem.
+// --site (opcional): pasta do site montado, para saber quais miniaturas e prints existem.
+// --alterados: protótipos mudados neste PR (aparecem como "em andamento" no preview).
+// --oficial-url + --publicado: no preview, protótipos que não foram montados apontam para a
+//   versão oficial (url) e as imagens são procuradas na cópia do site publicado (pasta).
 // --previews (opcional): PRs abertos com preview, produzido pelo CI. Formato:
 //   [{ "numero": 12, "titulo": "...", "branch": "...", "url": "https://.../", "pastas": ["prototipos/a/b/c"] }]
 // Variáveis opcionais: ATLAS_AMBIENTE (ex.: oficial, preview), ATLAS_REF (branch ou PR).
@@ -87,19 +91,20 @@ function lerResumo(arquivo) {
   return { titulo: primeira.replace(/^#\s*/, "").trim(), resumo: resto.join("\n").trim() };
 }
 
-function historicoDoPrototipo(caminho, site, id) {
-  const saida = git(["log", "--name-status", "--format=@@%h%x1f%aN%x1f%cI%x1f%s", "--", caminho]);
+function historicoDoPrototipo(caminho, imagens, id) {
+  const saida = git(["log", "--name-status", "--format=@@%H%x1f%aN%x1f%cI%x1f%s", "--", caminho]);
   const entradas = [];
   const usados = new Set();
   for (const bloco of saida.split("@@").filter(Boolean)) {
     const [cabecalho, ...linhas] = bloco.trim().split("\n");
-    const [sha, autor, data, assunto] = cabecalho.split("\x1f");
+    const [shaCompleto, autor, data, assunto] = cabecalho.split("\x1f");
+    const sha = shaCompleto.slice(0, 7);
     const pr = Number(assunto.match(/\(#(\d+)\)\s*$/)?.[1]) || null;
     const adicionados = linhas
       .map((l) => l.split("\t"))
       .filter(([status, arq]) => status === "A" && arq?.startsWith(`${caminho}/historico/`) && arq.endsWith(".md"))
       .map(([, arq]) => arq);
-    const prints = prints_de(site, id, sha);
+    const prints = prints_de(imagens.pasta, id, shaCompleto).map((src) => imagens.prefixo + src);
     const base = { sha, data, autor, pr, prUrl: linkDoPr(pr), prints };
     const existentes = adicionados.filter((arq) => existsSync(join(RAIZ, arq)));
     if (existentes.length) {
@@ -151,6 +156,15 @@ try {
 }
 
 const site = argumento("--site") ? resolve(argumento("--site")) : null;
+const alterados = new Set((argumento("--alterados") ?? "").split(",").filter(Boolean));
+const oficialUrl = argumento("--oficial-url") ? argumento("--oficial-url").replace(/\/?$/, "/") : null;
+const publicado = argumento("--publicado") ? resolve(argumento("--publicado")) : null;
+
+/** De onde vêm as páginas e imagens de um protótipo: deste site ou da versão oficial publicada. */
+function origemDe(id) {
+  const montadoAqui = site && existsSync(join(site, "p", id));
+  return !montadoAqui && oficialUrl ? { prefixo: oficialUrl, pasta: publicado } : { prefixo: "", pasta: site };
+}
 
 // 2. Programas, projetos e protótipos
 const programas = [];
@@ -173,22 +187,25 @@ for (const programa of subpastas(PASTA_PROTOTIPOS)) {
       const dados = lerJson(join(RAIZ, caminho, "prototype.json"));
       delete dados.$schema;
       const base = `p/${id}/`;
+      const imagens = origemDe(id);
+      const url = (arquivo) => imagens.prefixo + base + arquivo;
       prototipos.push({
         id,
         nome,
         caminho,
-        situacao: "oficial",
+        situacao: alterados.has(id) ? "em-andamento" : "oficial",
         ...dados,
         modulo: dados.modulo ?? "",
         descricao: dados.descricao ?? "",
         tags: dados.tags ?? [],
         telas: dados.telas ?? [],
-        url: base + dados.entrada,
-        canvasUrl: base + dados.canvas,
-        mapaUrl: base + dados.mapa,
-        miniatura: site && existsSync(join(site, base, "miniatura.png")) ? base + "miniatura.png" : null,
+        url: url(dados.entrada),
+        canvasUrl: url(dados.canvas),
+        mapaUrl: url(dados.mapa),
+        miniatura: imagens.pasta && existsSync(join(imagens.pasta, base, "miniatura.png")) ? url("miniatura.png") : null,
         git: historico(caminho),
-        historico: historicoDoPrototipo(caminho, site, id),
+        historico: historicoDoPrototipo(caminho, imagens, id),
+        emAndamento: [],
       });
     }
   }
@@ -204,6 +221,12 @@ programas.sort((a, b) => a.nome.localeCompare(b.nome));
 // 3. PRs em andamento (opcional, vindos do CI)
 const arquivoPreviews = argumento("--previews");
 const emAndamento = arquivoPreviews && existsSync(arquivoPreviews) ? JSON.parse(readFileSync(arquivoPreviews, "utf8")) : [];
+for (const pr of emAndamento) {
+  for (const p of prototipos) {
+    if (pr.pastas?.some((pasta) => pasta === p.caminho || pasta.startsWith(`${p.caminho}/`)))
+      p.emAndamento.push({ numero: pr.numero, titulo: pr.titulo, autor: pr.autor ?? null, url: pr.url });
+  }
+}
 
 // 4. Grava
 const catalogo = {

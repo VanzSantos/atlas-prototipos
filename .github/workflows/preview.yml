@@ -1,0 +1,98 @@
+# Preview de cada PR (específico do GitHub; o resto do repositório é neutro).
+#
+# A cada PR aberto ou atualizado:
+#   1. valida todos os protótipos e confere se cada protótipo alterado ganhou um resumo no histórico;
+#   2. monta só o que mudou (ou tudo, se a plataforma/scripts mudaram);
+#   3. publica em gh-pages/pr-preview/pr-<número>/ e comenta o link no PR.
+# Quando o PR fecha, o preview é apagado. Nos dois casos, a versão oficial é republicada
+# para atualizar a lista "Em andamento".
+#
+# Na migração para o Azure DevOps, este arquivo vira um pipeline de PR (ver docs/MIGRACAO.md).
+
+name: Preview do PR
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+
+permissions:
+  contents: write # publicar na branch gh-pages
+  pull-requests: write # comentar o link do preview
+  actions: write # pedir a republicação da versão oficial
+
+concurrency:
+  group: gh-pages # um deploy por vez na branch gh-pages
+  cancel-in-progress: false
+
+jobs:
+  validar:
+    name: Validar e montar
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar o código do PR (com histórico, para autoria e datas)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Baixar a versão publicada (prints antigos e imagens)
+        if: github.event.action != 'closed'
+        run: |
+          if git ls-remote --exit-code --heads origin gh-pages >/dev/null; then
+            git worktree add _publicado origin/gh-pages
+          else
+            mkdir -p _publicado
+          fi
+
+      - name: Preparar o Node
+        if: github.event.action != 'closed'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            plataforma/package-lock.json
+
+      - name: Instalar dependências
+        if: github.event.action != 'closed'
+        run: |
+          # O SeleneSDK vem do GitHub: força HTTPS (o agente não tem chave SSH).
+          git config --global url."https://github.com/".insteadOf "ssh://git@github.com/"
+          npm ci --no-audit --no-fund
+
+      - name: Validar protótipos
+        if: github.event.action != 'closed'
+        run: npm run validar
+
+      - name: Conferir resumos no histórico
+        if: github.event.action != 'closed'
+        run: node scripts/verificar-historico.mjs --base "origin/${{ github.base_ref }}"
+
+      - name: Montar o preview
+        if: github.event.action != 'closed'
+        env:
+          ATLAS_AMBIENTE: preview
+          ATLAS_REF: "PR #${{ github.event.number }}"
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          OFICIAL=$(gh api "repos/${{ github.repository }}/pages" --jq .html_url 2>/dev/null || echo "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/")
+          INFO=$(node scripts/pastas-alteradas.mjs --base "origin/${{ github.base_ref }}" --json)
+          ALTERADOS=$(echo "$INFO" | node -e 'let d="";process.stdin.on("data",c=>d+=c).on("end",()=>console.log(JSON.parse(d).prototipos.join(",")))')
+          TUDO=$(echo "$INFO" | node -e 'let d="";process.stdin.on("data",c=>d+=c).on("end",()=>console.log(JSON.parse(d).tudo))')
+          echo "Protótipos alterados: ${ALTERADOS:-nenhum} · plataforma alterada: $TUDO"
+          ARGS=(--saida site --publicado _publicado --oficial-url "$OFICIAL" --alterados "$ALTERADOS")
+          if [ "$TUDO" != "true" ]; then ARGS+=(--apenas "$ALTERADOS"); fi
+          node scripts/montar-site.mjs "${ARGS[@]}"
+
+      - name: Publicar o preview e comentar o link
+        uses: rossjrw/pr-preview-action@v1
+        with:
+          source-dir: site
+          preview-branch: gh-pages
+          umbrella-dir: pr-preview
+
+      - name: Atualizar a lista "Em andamento" da versão oficial
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run publicar.yml --ref "${{ github.event.repository.default_branch }}" || echo "A versão oficial ainda não foi publicada."

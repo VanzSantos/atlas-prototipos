@@ -56,6 +56,13 @@ export function App() {
     <div className="atlas-layout">
       <Navegacao catalogo={catalogo} rota={rota} />
       <main className="atlas-principal">
+        {catalogo.ambiente === "preview" && (
+          <div className="atlas-aviso-preview" role="status">
+            Você está vendo o <strong>preview {catalogo.ref ?? "de uma mudança"}</strong>, ainda não aprovado. Os protótipos marcados
+            com “Alterado nesta mudança” são os que este PR modifica.
+          </div>
+        )}
+        {rota.tipo === "recentes" && catalogo.emAndamento.length > 0 && <EmAndamento catalogo={catalogo} />}
         {rota.tipo === "recentes" && (
           <ListaPrototipos
             catalogo={catalogo}
@@ -97,6 +104,28 @@ function buscar(catalogo: Catalogo, termo: string): Prototipo[] {
     );
     return termos.every((t) => alvo.includes(t));
   });
+}
+
+/** PRs abertos com preview: o que está "em andamento" e ainda não entrou na versão oficial. */
+function EmAndamento({ catalogo }: { catalogo: Catalogo }) {
+  return (
+    <section className="atlas-andamento" aria-labelledby="atlas-andamento-titulo">
+      <h2 id="atlas-andamento-titulo" className="atlas-andamento-titulo">
+        Em andamento <span className="atlas-nav-contagem">{catalogo.emAndamento.length}</span>
+      </h2>
+      <ul className="atlas-andamento-lista">
+        {catalogo.emAndamento.map((pr) => (
+          <li key={pr.numero}>
+            <a href={pr.url} target="_blank" rel="noreferrer">
+              <span className="atlas-andamento-pr">PR #{pr.numero}</span>
+              <strong>{pr.titulo}</strong>
+              <span className="atlas-meta">{pr.autor ? `${pr.autor} · ` : ""}ver preview ↗</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
 }
 
 /** Mais recentes primeiro. O que ainda não foi commitado (trabalho local) vem no topo. */

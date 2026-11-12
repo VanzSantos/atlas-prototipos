@@ -98,6 +98,8 @@ Nunca edite nem apague resumos antigos: cada arquivo é o registro de uma mudan�
 - O que é específico do GitHub fica **só** em `.github/workflows/`.
 - Scripts de build e validação ficam fora de `.github/` e não dependem de recursos do GitHub,
   para a migração ao Azure DevOps mexer só no deploy.
+- Antes de dizer que terminou, rode também `node scripts/verificar-historico.mjs --base origin/main`
+  (o mesmo teste que o PR vai fazer).
 
 ## Ao finalizar
 
