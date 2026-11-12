@@ -1,0 +1,23 @@
+# Dependências
+node_modules/
+
+# Saídas de build (geradas, nunca commitadas)
+dist/
+build/
+.out/
+
+# Arquivos gerados pela plataforma (catálogo/manifesto vêm do git e dos prototype.json)
+plataforma/gerado/
+
+# Sistema e editores
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Logs e variáveis locais
+*.log
+.env
+.env.*
+!.env.example

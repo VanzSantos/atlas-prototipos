@@ -1,0 +1,16 @@
+# CODEOWNERS — quem precisa revisar cada pasta.
+# A última regra que combinar com o arquivo vence. Use @usuario do GitHub.
+# Ao criar um protótipo, adicione uma linha para a pasta dele com o(s) dono(s).
+
+# Padrão: tudo passa pela responsável do Atlas
+*                       @VanzSantos
+
+# Estrutura do repositório e automação
+/plataforma/            @VanzSantos
+/.github/               @VanzSantos
+/CODEOWNERS             @VanzSantos
+/AGENTS.md              @VanzSantos
+
+# Protótipos (exemplos, descomente e ajuste)
+# /prototipos/portal-beneficiario/            @usuario-do-time
+# /prototipos/portal-beneficiario/agendamento/ @dono-do-prototipo
