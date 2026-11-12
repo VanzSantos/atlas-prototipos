@@ -135,6 +135,22 @@ function PaginaProjeto({ catalogo, rota }: { catalogo: Catalogo; rota: Extract<R
   );
 }
 
+/**
+ * Rótulo com a quantidade num chip discreto.
+ * O SideNav do SeleneSDK tipa `label` como texto, mas só o desenha dentro de um <span>;
+ * por isso um elemento funciona aqui. Se o SideNav ganhar suporte a contagem, trocar por ele.
+ */
+function rotuloComContagem(texto: string, total: number): string {
+  return (
+    <span className="atlas-nav-rotulo">
+      <span>{texto}</span>
+      <span className="atlas-nav-contagem" aria-label={`${total} protótipo(s)`}>
+        {total}
+      </span>
+    </span>
+  ) as unknown as string;
+}
+
 /** Recentes + categoria Programas → programa → projetos. */
 function Navegacao({ catalogo, rota }: { catalogo: Catalogo; rota: Rota }) {
   const projetoAtual = rota.tipo === "projeto" ? rota.id : "";
@@ -149,7 +165,7 @@ function Navegacao({ catalogo, rota }: { catalogo: Catalogo; rota: Rota }) {
         label: programa.nome,
         children: programa.projetos.map((projeto) => ({
           key: `projeto:${projeto.id}`,
-          label: `${projeto.nome} (${projeto.total})`,
+          label: rotuloComContagem(projeto.nome, projeto.total),
           href: hrefProjeto(projeto.id),
           active: projeto.id === projetoAtual,
         })),

@@ -473,3 +473,36 @@ a {
 .atlas-layout nav li > a[aria-current="page"] svg {
   fill: var(--acao-link-texto);
 }
+
+/* Quantidade de protótipos ao lado do projeto, num chip neutro e discreto */
+.atlas-layout nav li > a > span:has(> .atlas-nav-rotulo) {
+  flex: 1;
+  min-width: 0;
+}
+
+.atlas-nav-rotulo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-p);
+}
+
+.atlas-nav-rotulo > span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.atlas-nav-contagem {
+  flex-shrink: 0;
+  min-width: 20px;
+  padding: 1px 7px;
+  box-sizing: border-box;
+  border-radius: 999px;
+  background: var(--atlas-nav-atual);
+  color: var(--texto-secundario);
+  font-size: var(--texto-micro-size);
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: center;
+}
