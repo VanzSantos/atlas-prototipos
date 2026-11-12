@@ -449,17 +449,6 @@ a {
   font-size: var(--texto-micro-size);
 }
 
-/* Rodapé: Canvas e Mapa (ficam acima do link que cobre o cartão) */
-.atlas-cartao-acoes {
-  position: relative;
-  z-index: 2;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--espaco-p);
-  margin-top: auto;
-  padding: var(--espaco-m) var(--espaco-xp) var(--espaco-xp);
-}
-
 .atlas-acoes {
   display: flex;
   gap: var(--espaco-p);
@@ -537,4 +526,9 @@ a {
   padding: 0 var(--espaco-m);
   background: var(--fundo-superficie);
   border-bottom: 1px solid var(--borda-base);
+}
+
+/* Respiro no fim do cartão (o último bloco pode ser as tags ou os metadados). */
+.atlas-cartao > :last-child {
+  margin-bottom: var(--espaco-xp);
 }

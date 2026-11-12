@@ -133,26 +133,26 @@ export function ListaPrototipos({ catalogo, sobretitulo, titulo, subtitulo, prot
   );
 }
 
-/** Rodar em nova aba, canvas e mapa do fluxo. */
-function Acoes({ prototipo: p, compacto }: { prototipo: Prototipo; compacto?: boolean }) {
+/** Ações da lista: abrem o visualizador do Atlas já na aba certa. */
+function Acoes({ prototipo: p }: { prototipo: Prototipo }) {
   return (
-    <div className={`atlas-acoes${compacto ? " atlas-acoes-compactas" : ""}`}>
-      <a className="atlas-botao" href={p.url} target="_blank" rel="noreferrer" title="Abre o protótipo navegável numa nova aba">
-        Rodar ↗
+    <div className="atlas-acoes atlas-acoes-compactas">
+      <a className="atlas-botao" href={hrefPrototipo(p.id)}>
+        Rodar
       </a>
-      <a className="atlas-botao atlas-botao-sutil" href={p.canvasUrl} target="_blank" rel="noreferrer" title="Telas estáticas com anotações">
-        Canvas ↗
+      <a className="atlas-botao atlas-botao-sutil" href={hrefPrototipo(p.id, "canvas")}>
+        Canvas
       </a>
-      <a className="atlas-botao atlas-botao-sutil" href={p.mapaUrl} target="_blank" rel="noreferrer" title="Mapa de navegação do fluxo">
-        Mapa ↗
+      <a className="atlas-botao atlas-botao-sutil" href={hrefPrototipo(p.id, "mapa")}>
+        Mapa
       </a>
     </div>
   );
 }
 
 /**
- * Cartão no estilo "mídia + conteúdo". O cartão inteiro roda o protótipo numa nova aba
- * (o link do título se estende sobre o cartão); Canvas e Mapa ficam por cima, no rodapé.
+ * Cartão no estilo "mídia + conteúdo". O cartão inteiro abre o protótipo no visualizador
+ * do Atlas (o link do título se estende sobre o cartão), onde ficam Protótipo, Canvas e Mapa.
  */
 function Cartao({ prototipo: p, origem }: { prototipo: Prototipo; origem?: string }) {
   const MAX_TAGS = 2;
@@ -177,7 +177,7 @@ function Cartao({ prototipo: p, origem }: { prototipo: Prototipo; origem?: strin
       <div className="atlas-cartao-texto">
         {origem && <p className="atlas-sobretitulo">{origem}</p>}
         <h2 className="atlas-cartao-titulo">
-          <a className="atlas-cartao-link" href={p.url} target="_blank" rel="noreferrer" aria-label={`Rodar o protótipo ${p.fluxo} numa nova aba`}>
+          <a className="atlas-cartao-link" href={hrefPrototipo(p.id)} aria-label={`Rodar o protótipo ${p.fluxo}`}>
             {p.fluxo}
           </a>
         </h2>
@@ -214,14 +214,6 @@ function Cartao({ prototipo: p, origem }: { prototipo: Prototipo; origem?: strin
         </ul>
       )}
 
-      <div className="atlas-cartao-acoes">
-        <a className="atlas-botao atlas-botao-sutil" href={p.canvasUrl} target="_blank" rel="noreferrer" title="Telas estáticas com anotações">
-          Canvas ↗
-        </a>
-        <a className="atlas-botao atlas-botao-sutil" href={p.mapaUrl} target="_blank" rel="noreferrer" title="Mapa de navegação do fluxo">
-          Mapa ↗
-        </a>
-      </div>
     </article>
   );
 }
@@ -260,7 +252,7 @@ function Tabela({ prototipos, origem }: { prototipos: Prototipo[]; origem?: (p: 
               <td>{formatarData(p.git.atualizadoEm)}</td>
               <td>{p.git.alteradoPor ?? "—"}</td>
               <td>
-                <Acoes prototipo={p} compacto />
+                <Acoes prototipo={p} />
               </td>
             </tr>
           ))}
