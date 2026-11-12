@@ -33,13 +33,15 @@ Guia curto para quem vai adicionar ou mudar um protótipo. Não precisa saber Gi
    ```bash
    git switch -c prototipo/<projeto>/<nome>
    ```
-3. **Trabalhe na sua pasta** `prototipos/<projeto>/<nome>/` e mantenha o `prototype.json` atualizado.
-4. **Valide localmente** (precisa do Node 20 ou mais novo):
+3. **Na primeira vez**, instale as dependências com `npm install`. Para ver o Atlas com o seu
+   protótipo, rode `npm run dev` e abra http://localhost:5173.
+4. **Trabalhe na sua pasta** `prototipos/<projeto>/<nome>/` e mantenha o `prototype.json` atualizado.
+5. **Valide localmente** (precisa do Node 20 ou mais novo):
    ```bash
    npm run validar
    ```
    Se aparecer ✖, a mensagem diz qual campo corrigir no `prototype.json`.
-5. **Salve e envie:**
+6. **Salve e envie:**
    ```bash
    git add prototipos/<projeto>/<nome>
    ```
@@ -49,8 +51,8 @@ Guia curto para quem vai adicionar ou mudar um protótipo. Não precisa saber Gi
    ```bash
    git push -u origin HEAD
    ```
-6. **Abra o PR** no site e preencha o modelo. O preview aparece como comentário no PR.
-7. **Peça revisão.** O PR precisa de build passando e 1 aprovação. O merge é feito como *squash*
+7. **Abra o PR** no site e preencha o modelo. O preview aparece como comentário no PR.
+8. **Peça revisão.** O PR precisa de build passando e 1 aprovação. O merge é feito como *squash*
    e a branch é apagada sozinha depois.
 
 ## Mensagens de commit

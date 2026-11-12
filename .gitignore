@@ -21,3 +21,6 @@ Thumbs.db
 .env
 .env.*
 !.env.example
+
+# Site montado pelo build (scripts/montar-site.mjs)
+site/

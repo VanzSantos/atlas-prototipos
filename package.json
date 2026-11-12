@@ -7,6 +7,10 @@
     "node": ">=20"
   },
   "scripts": {
-    "validar": "node scripts/validar-prototipos.mjs"
+    "postinstall": "npm --prefix plataforma install --ignore-scripts --no-audit --no-fund",
+    "validar": "node scripts/validar-prototipos.mjs",
+    "catalogo": "node scripts/gerar-catalogo.mjs",
+    "dev": "node scripts/montar-site.mjs --saida plataforma/gerado --sem-plataforma && npm --prefix plataforma run dev",
+    "build": "node scripts/montar-site.mjs --saida site"
   }
 }

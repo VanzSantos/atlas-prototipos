@@ -36,6 +36,19 @@ atlas-prototipos/
 
 ## Começando
 
+Precisa do Node 20 ou mais novo.
+
+```bash
+npm install
+```
+
+```bash
+npm run dev
+```
+
+Abra http://localhost:5173. Outros comandos: `npm run validar` (confere os `prototype.json`) e
+`npm run build` (monta o site completo em `site/`, igual ao publicado).
+
 - Vai contribuir? Leia o [CONTRIBUTING.md](CONTRIBUTING.md).
 - Usa Codex ou Claude? O agente lê o [AGENTS.md](AGENTS.md) sozinho. Basta pedir.
 

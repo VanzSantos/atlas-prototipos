@@ -1,0 +1,234 @@
+/* Estilos de layout do Atlas. Cores, espaços e tipografia vêm dos tokens do SeleneSDK. */
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--fundo-secundario);
+  color: var(--texto-primario);
+  font-family: var(--texto-p-family);
+  font-size: var(--texto-p-size);
+  line-height: var(--texto-p-line-height);
+}
+
+:root[data-theme="dark"] body {
+  background: var(--fundo-superficie);
+}
+
+a {
+  color: inherit;
+}
+
+.atlas-layout {
+  display: flex;
+  height: 100%;
+}
+
+.atlas-principal {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+}
+
+.atlas-centro {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  padding: var(--espaco-g);
+}
+
+.atlas-marca {
+  font-family: var(--texto-g-forte-family);
+  font-size: var(--texto-g-forte-size);
+  font-weight: var(--texto-g-forte-weight);
+}
+
+.atlas-catalogo {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--espaco-g);
+}
+
+.atlas-cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--espaco-m);
+  margin-bottom: var(--espaco-g);
+}
+
+.atlas-titulo {
+  margin: 0;
+  font-family: var(--texto-g-forte-family);
+  font-size: var(--texto-g-forte-size);
+  font-weight: var(--texto-g-forte-weight);
+  line-height: var(--texto-g-forte-line-height);
+}
+
+.atlas-titulo-secao {
+  font-family: var(--texto-m-forte-family);
+  font-size: var(--texto-m-forte-size);
+  font-weight: var(--texto-m-forte-weight);
+}
+
+.atlas-subtitulo,
+.atlas-meta {
+  margin: 0;
+  color: var(--texto-secundario);
+  font-size: var(--texto-micro-size);
+  line-height: var(--texto-micro-line-height);
+}
+
+.atlas-filtros {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: var(--espaco-m);
+  align-items: end;
+  margin-bottom: var(--espaco-g);
+}
+
+.atlas-busca {
+  grid-column: 1 / -1;
+}
+
+.atlas-grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--espaco-m);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.atlas-grade > li > * {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.atlas-cartao {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-p);
+  height: 100%;
+}
+
+.atlas-cartao-selos {
+  display: flex;
+  gap: var(--espaco-p);
+  flex-wrap: wrap;
+}
+
+.atlas-cartao-titulo {
+  margin: 0;
+  font-family: var(--texto-m-forte-family);
+  font-size: var(--texto-m-forte-size);
+  font-weight: var(--texto-m-forte-weight);
+  line-height: var(--texto-m-forte-line-height);
+}
+
+.atlas-cartao-titulo a {
+  text-decoration: none;
+}
+
+.atlas-cartao-titulo a:hover {
+  text-decoration: underline;
+}
+
+.atlas-cartao-descricao {
+  margin: 0;
+}
+
+.atlas-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-p);
+  margin: 0;
+}
+
+.atlas-tag {
+  color: var(--acao-primaria);
+  font-size: var(--texto-micro-size);
+  text-decoration: none;
+}
+
+:root[data-theme="dark"] .atlas-tag {
+  color: var(--acao-secundaria);
+}
+
+.atlas-cartao-acoes {
+  display: flex;
+  gap: var(--espaco-p);
+  margin-top: auto;
+  padding-top: var(--espaco-p);
+}
+
+/* Links com aparência de botão (o Button do SeleneSDK é <button>, e aqui precisamos de <a>). */
+.atlas-botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--espaco-p) var(--espaco-m);
+  border-radius: var(--raio-p);
+  background: var(--acao-primaria);
+  color: var(--acao-primaria-texto);
+  font-family: var(--texto-rotulo-botao-family);
+  font-size: var(--texto-rotulo-botao-size);
+  font-weight: var(--texto-rotulo-botao-weight);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.atlas-botao:hover {
+  background: var(--acao-primaria-sobreposta);
+}
+
+.atlas-botao-sutil {
+  background: var(--acao-sutil);
+  color: var(--texto-primario);
+}
+
+.atlas-botao-sutil:hover {
+  background: var(--acao-sutil-sobreposta);
+}
+
+.atlas-andamento {
+  margin-top: var(--espaco-gg);
+}
+
+.atlas-visualizador {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.atlas-barra {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-m);
+  padding: var(--espaco-p) var(--espaco-m);
+  background: var(--fundo-superficie);
+  border-bottom: 1px solid var(--borda-base);
+  flex-wrap: wrap;
+}
+
+.atlas-barra-titulo {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 160px;
+}
+
+.atlas-barra-tela {
+  width: 200px;
+}
+
+.atlas-quadro {
+  flex: 1;
+  width: 100%;
+  border: 0;
+  background: #fff;
+}

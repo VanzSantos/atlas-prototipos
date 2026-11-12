@@ -40,6 +40,16 @@ Quando uma decisão mudar, não apague: marque como **Substituída** e adicione 
 | D16 | Autoria e datas **não** ficam no `prototype.json`; vêm do histórico do git. | Menos campo para esquecer e nenhuma informação duplicada. |
 | D17 | Validador em Node puro, sem dependências (`npm run validar`). | Roda igual no computador, no GitHub Actions e no Azure Pipelines. |
 
+## Decididas em 12/11/2026 (passo 5)
+
+| # | Decisão | Por quê |
+|---|---------|---------|
+| D18 | SeleneSDK entra como **dependência Git fixa num commit** (`plataforma/package.json`, hoje `512045c`). Os componentes são importados do código-fonte (`selenesdk/src/components/...`). | O SeleneSDK é público, mas não é publicado como pacote. Assim não copiamos código nem mexemos nele. Atualizar = trocar o commit e testar. |
+| D19 | Instalação com `ignore-scripts` (`plataforma/.npmrc`). | O `postinstall` do SeleneSDK gera o manifesto do ProtoTable, que não serve ao Atlas e falharia fora do repositório dele. |
+| D20 | Plataforma em React + Vite, com `base: "./"` e navegação por hash (`#/?projeto=...`, `#/p/<projeto>/<nome>?tela=<id>`). | O mesmo build funciona na raiz, num subcaminho do Pages ou num preview de PR, sem configurar servidor. Links de filtro e de tela são compartilháveis. |
+| D21 | `scripts/montar-site.mjs` monta o site inteiro (`site/`): plataforma, `catalogo.json` e `p/<projeto>/<nome>/`. | O CI só precisa rodar `npm run build` e publicar `site/`. Isso é igual no GitHub e no Azure. |
+| D22 | O catálogo aceita uma lista de PRs abertos (`--previews`), fornecida pelo CI. | "Em andamento" vem do CI (passo 6), sem lista editada à mão. |
+
 ## Pendências
 
 ### P1 — Repo privado × GitHub Pages
@@ -58,4 +68,4 @@ Quando uma decisão mudar, não apague: marque como **Substituída** e adicione 
 - Opções: pacote npm publicado, dependência via Git (`github:VanzSantos/SeleneSDK`) ou pacote em
   registro privado (no Azure: Azure Artifacts).
 - Se o SeleneSDK for privado, o CI do Atlas precisa de permissão de leitura nele.
-- **Status:** resolver no passo 5 (plataforma).
+- **Status:** resolvida em 12/11/2026 — ver D18.
