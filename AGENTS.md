@@ -32,9 +32,13 @@ simples, um passo por vez, e diga qual é o próximo passo.
 
 ## Protótipo: contrato
 
-- Toda pasta de protótipo tem um `prototype.json` válido (schema definido no passo 4).
+- Toda pasta de protótipo tem um `prototype.json` válido, conforme `schema/prototype.schema.json`.
+  Use `prototipos/exemplos/` como modelo.
 - O protótipo precisa gerar uma saída **estática** em `dist/` (HTML, CSS, JS e imagens).
-- Rode o validador antes de finalizar (comando definido no passo 4).
+- `build: null` = a pasta já é estática e o arquivo de `entrada` existe nela.
+  `build: {"comando": "..."}` = o comando, rodado na pasta, gera a saída (padrão `dist/`).
+- Rode `npm run validar` antes de finalizar e só siga se não houver ✖.
+- Não coloque autoria nem datas no `prototype.json`: elas vêm do histórico do git.
 - **Nada de dados reais ou sensíveis**: os links de preview são públicos. Use dados fictícios.
 
 ## Neutralidade de plataforma

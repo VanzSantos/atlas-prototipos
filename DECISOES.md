@@ -31,6 +31,15 @@ Quando uma decisão mudar, não apague: marque como **Substituída** e adicione 
 | D12 | `CODEOWNERS` na raiz, com `@VanzSantos` como padrão. | GitHub lê na raiz. No Azure DevOps vira política de revisores por pasta (ver passo 9). |
 | D13 | Branches: `prototipo/<projeto>/<nome>`, `plataforma/<descricao>`, `docs/<descricao>`. | Fácil de ler e de filtrar; uma branch por mudança. |
 
+## Decididas em 12/11/2026 (passo 4)
+
+| # | Decisão | Por quê |
+|---|---------|---------|
+| D14 | Contrato em `schema/prototype.schema.json` (JSON Schema). Obrigatórios: `versao`, `titulo`, `projeto`, `modulo`, `fluxo`, `status`, `donos`, `entrada`. | Fonte única: o editor autocompleta e o validador usa o mesmo arquivo. |
+| D15 | Status: `rascunho`, `em-andamento`, `em-revisao`, `aprovado`, `arquivado`. | Cobre o ciclo de vida sem depender de "oficial/PR", que vem do git. |
+| D16 | Autoria e datas **não** ficam no `prototype.json`; vêm do histórico do git. | Menos campo para esquecer e nenhuma informação duplicada. |
+| D17 | Validador em Node puro, sem dependências (`npm run validar`). | Roda igual no computador, no GitHub Actions e no Azure Pipelines. |
+
 ## Pendências
 
 ### P1 — Repo privado × GitHub Pages

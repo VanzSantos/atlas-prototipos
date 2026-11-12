@@ -24,6 +24,8 @@ atlas-prototipos/
 ├─ prototipos/<projeto>/<nome>/
 │    ├─ prototype.json         metadados do protótipo
 │    └─ código do protótipo    gera uma saída estática em dist/
+├─ schema/                     contrato do prototype.json
+├─ scripts/                    validação e build (neutros, rodam em qualquer CI)
 ├─ docs/                       guias e modelo de PR
 ├─ .github/workflows/          build e preview (único lugar específico do GitHub)
 ├─ CODEOWNERS                  quem revisa cada pasta
