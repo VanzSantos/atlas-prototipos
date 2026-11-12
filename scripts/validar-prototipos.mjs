@@ -93,6 +93,8 @@ function regrasDoAtlas(dados, pasta, erros, avisos) {
   if (typeof dados.projeto === "string" && dados.projeto !== projeto)
     erros.push(`projeto: deve ser igual ao nome da pasta ("${projeto}"), veio "${dados.projeto}"`);
 
+  validarHistorico(pasta, erros);
+
   // Canvas e mapa do fluxo são feitos junto com o protótipo. Em rascunho, só avisa.
   for (const campo of ["canvas", "mapa"]) {
     if (typeof dados[campo] === "string" && !existsSync(join(pasta, dados[campo]))) {
@@ -112,6 +114,31 @@ function regrasDoAtlas(dados, pasta, erros, avisos) {
   if (dados.build === null || dados.build === undefined) {
     if (typeof dados.entrada === "string" && !existsSync(join(pasta, dados.entrada)))
       erros.push(`entrada: arquivo "${dados.entrada}" não encontrado na pasta (sem build, ele precisa existir)`);
+  }
+}
+
+// ---------- Histórico: um arquivo de resumo por mudança ----------
+// historico/AAAA-MM-DD-descricao.md, começando com "# Título" e um texto em linguagem simples.
+
+const NOME_HISTORICO = /^\d{4}-\d{2}-\d{2}-[a-z0-9]+(-[a-z0-9]+)*\.md$/;
+const MAX_RESUMO = 1500;
+
+function validarHistorico(pasta, erros) {
+  const dir = join(pasta, "historico");
+  if (!existsSync(dir)) return;
+  for (const arquivo of readdirSync(dir)) {
+    if (arquivo.startsWith(".")) continue;
+    const onde = `historico/${arquivo}`;
+    if (!NOME_HISTORICO.test(arquivo)) {
+      erros.push(`${onde}: nome deve ser AAAA-MM-DD-descricao.md (ex.: 2026-11-12-tela-de-confirmacao.md)`);
+      continue;
+    }
+    const texto = readFileSync(join(dir, arquivo), "utf8").trim();
+    const [primeira, ...resto] = texto.split("\n");
+    if (!/^# \S/.test(primeira ?? "")) erros.push(`${onde}: a primeira linha deve ser o título, começando com "# "`);
+    const corpo = resto.join("\n").trim();
+    if (corpo.length < 20) erros.push(`${onde}: escreva um resumo do que mudou (pelo menos uma frase)`);
+    if (corpo.length > MAX_RESUMO) erros.push(`${onde}: resumo longo demais (máximo ${MAX_RESUMO} caracteres)`);
   }
 }
 

@@ -54,6 +54,28 @@ Regras:
 - Em `status: "rascunho"`, o validador só avisa se canvas ou mapa faltarem; nos outros status, falha.
 - Use os exemplos em `prototipos/exemplo/` como modelo de canvas e mapa.
 
+## Histórico: um resumo por mudança (obrigatório)
+
+Todo PR que muda um protótipo **acrescenta um arquivo novo** em `historico/`, dentro da pasta dele.
+Nunca edite nem apague resumos antigos: cada arquivo é o registro de uma mudança.
+
+- Nome: `historico/AAAA-MM-DD-descricao-curta.md`, com a data de hoje. Exemplo:
+  `historico/2026-11-12-tela-de-confirmacao.md`.
+- Primeira linha: `# Título curto do que mudou`.
+- Depois, de 1 a 5 frases ou itens `- ` em **linguagem simples**, para qualquer pessoa entender,
+  sem termos técnicos (nada de "refatora", "CSS", "componente", "props"). Diga **o que mudou para
+  quem usa** e, se ajudar, **por quê**. Pode usar `**negrito**`.
+- Não escreva data, hora, autor ou número do PR: o Atlas pega isso do git sozinho.
+- Modelo:
+
+  ```markdown
+  # Tela de confirmação adicionada
+
+  Depois de escolher o horário, a pessoa agora vê um resumo da consulta antes de confirmar.
+  - **Novo:** botão para trocar o horário sem voltar ao início.
+  - **Ajuste:** o texto do lembrete ficou mais claro.
+  ```
+
 ## Protótipo: build e validação
 
 - O protótipo precisa gerar uma saída **estática** em `dist/` (HTML, CSS, JS e imagens).

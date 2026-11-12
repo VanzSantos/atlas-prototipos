@@ -706,3 +706,150 @@ a {
   object-position: center top;
   filter: drop-shadow(0 2px 6px rgba(17, 24, 39, 0.18));
 }
+
+/* Histórico: linha do tempo das mudanças */
+.atlas-historico {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--espaco-g);
+  background: var(--fundo-secundario);
+}
+
+:root[data-theme="dark"] .atlas-historico {
+  background: var(--fundo-superficie);
+}
+
+.atlas-historico-lista {
+  position: relative;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+/* A linha vertical que liga os marcos */
+.atlas-historico-lista::before {
+  content: "";
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 7px;
+  width: 2px;
+  background: var(--borda-base);
+}
+
+.atlas-historico-item {
+  position: relative;
+  padding-left: 36px;
+  margin-bottom: var(--espaco-m);
+}
+
+.atlas-historico-marco {
+  position: absolute;
+  top: 18px;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 3px solid var(--fundo-secundario);
+  background: var(--acao-link-texto);
+  box-shadow: 0 0 0 1px var(--borda-base);
+}
+
+:root[data-theme="dark"] .atlas-historico-marco {
+  border-color: var(--fundo-superficie);
+}
+
+.atlas-historico-item article {
+  padding: var(--espaco-m);
+  border: 1px solid var(--borda-base);
+  border-radius: 14px;
+  background: var(--fundo-superficie);
+  box-shadow: var(--sombra-pp);
+}
+
+:root[data-theme="dark"] .atlas-historico-item article {
+  background: var(--fundo-secundario);
+}
+
+.atlas-historico-cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espaco-m);
+  color: var(--texto-secundario);
+  font-size: var(--texto-micro-size);
+}
+
+.atlas-historico-quando,
+.atlas-historico-quem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.atlas-historico-quem {
+  color: var(--texto-primario);
+  font-weight: 500;
+}
+
+.atlas-historico-pr {
+  margin-left: auto;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--atlas-nav-atual);
+  color: var(--texto-secundario);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+a.atlas-historico-pr:hover {
+  color: var(--acao-link-texto);
+}
+
+.atlas-historico-titulo {
+  margin: var(--espaco-p) 0 0;
+  font-family: var(--texto-m-forte-family);
+  font-size: var(--texto-m-forte-size);
+  font-weight: var(--texto-m-forte-weight);
+  line-height: var(--texto-m-forte-line-height);
+}
+
+.atlas-historico-resumo {
+  color: var(--texto-primario);
+  font-size: var(--texto-p-size);
+  line-height: var(--texto-p-line-height);
+}
+
+.atlas-historico-resumo p,
+.atlas-historico-resumo ul {
+  margin: var(--espaco-p) 0 0;
+}
+
+.atlas-historico-resumo ul {
+  padding-left: 1.2em;
+}
+
+.atlas-historico-aviso {
+  margin: var(--espaco-p) 0 0;
+  color: var(--texto-secundario);
+  font-size: var(--texto-micro-size);
+  font-style: italic;
+}
+
+.atlas-historico-prints {
+  display: flex;
+  gap: var(--espaco-p);
+  margin: var(--espaco-m) 0 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: auto;
+}
+
+.atlas-historico-prints img {
+  display: block;
+  height: 120px;
+  border: 1px solid var(--borda-base);
+  border-radius: var(--raio-p);
+}

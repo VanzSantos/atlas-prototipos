@@ -5,6 +5,7 @@ import { Badge } from "selenesdk/src/components/Badge/Badge";
 import { EmptyState } from "selenesdk/src/components/EmptyState/EmptyState";
 import { hrefPrototipo, hrefProjeto, hrefRecentes, type Aba } from "./rotas";
 import { PainelTelas } from "./PainelTelas";
+import { Historico } from "./Historico";
 import { STATUS_COR, STATUS_ROTULO, formatarData, type Catalogo } from "./tipos";
 
 type Tamanho = "desktop" | "mobile";
@@ -96,9 +97,11 @@ export function Visualizador({ catalogo, id, aba, tela }: { catalogo: Catalogo; 
             ]}
           />
         )}
-        <a className="atlas-botao" href={src} target="_blank" rel="noreferrer">
-          Nova aba ↗
-        </a>
+        {aba !== "historico" && (
+          <a className="atlas-botao" href={src} target="_blank" rel="noreferrer">
+            Nova aba ↗
+          </a>
+        )}
       </header>
       <div className="atlas-barra-abas">
         <Tabs
@@ -109,21 +112,26 @@ export function Visualizador({ catalogo, id, aba, tela }: { catalogo: Catalogo; 
             { value: "prototipo", label: "Protótipo" },
             { value: "canvas", label: "Canvas" },
             { value: "mapa", label: "Mapa do fluxo" },
+            { value: "historico", label: "Histórico" },
           ]}
         />
       </div>
-      <div className={`atlas-area${emCelular ? " atlas-area-celular" : ""}`}>
-        <div className="atlas-moldura">
-          <iframe key={src} ref={quadro} className="atlas-quadro" src={src} title={`${p.fluxo} · ${aba}`} onLoad={acompanharQuadro} />
+      {aba === "historico" ? (
+        <Historico entradas={p.historico} />
+      ) : (
+        <div className={`atlas-area${emCelular ? " atlas-area-celular" : ""}`}>
+          <div className="atlas-moldura">
+            <iframe key={src} ref={quadro} className="atlas-quadro" src={src} title={`${p.fluxo} · ${aba}`} onLoad={acompanharQuadro} />
+          </div>
+          {aba === "prototipo" && p.telas.length > 0 && (
+            <PainelTelas
+              telas={p.telas}
+              ativa={telaAtiva}
+              aoEscolher={(idTela) => (window.location.hash = hrefPrototipo(p.id, "prototipo", idTela))}
+            />
+          )}
         </div>
-        {aba === "prototipo" && p.telas.length > 0 && (
-          <PainelTelas
-            telas={p.telas}
-            ativa={telaAtiva}
-            aoEscolher={(idTela) => (window.location.hash = hrefPrototipo(p.id, "prototipo", idTela))}
-          />
-        )}
-      </div>
+      )}
     </div>
   );
 }

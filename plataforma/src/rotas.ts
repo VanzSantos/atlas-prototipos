@@ -5,7 +5,7 @@
 //   #/p/<programa>/<projeto>/<nome>?aba=canvas protótipo aberto dentro do Atlas
 import { useEffect, useState } from "react";
 
-export type Aba = "prototipo" | "canvas" | "mapa";
+export type Aba = "prototipo" | "canvas" | "mapa" | "historico";
 
 export type Rota =
   | { tipo: "recentes" }
@@ -23,7 +23,7 @@ export function lerRota(hash = window.location.hash): Rota {
     return {
       tipo: "prototipo",
       id: partes.slice(1, 4).join("/"),
-      aba: aba === "canvas" || aba === "mapa" ? aba : "prototipo",
+      aba: aba === "canvas" || aba === "mapa" || aba === "historico" ? aba : "prototipo",
       tela: params.get("tela") ?? "",
     };
   }

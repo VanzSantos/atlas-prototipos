@@ -15,6 +15,7 @@
 
 - [ ] Mexi só na minha pasta (ou a mudança de outras áreas foi combinada)
 - [ ] Protótipo, canvas e mapa do fluxo estão atualizados juntos
+- [ ] Criei o resumo da mudança em `historico/` (linguagem simples)
 - [ ] O `prototype.json` está atualizado
 - [ ] Usei só dados fictícios (o preview é público)
 - [ ] Rodei a validação localmente

@@ -59,6 +59,79 @@ function historico(caminho) {
   };
 }
 
+// ---------- Histórico de mudanças ----------
+// Cada mudança que entra (normalmente um PR com squash) é um commit na pasta do protótipo.
+// O texto vem de historico/*.md, adicionado no mesmo commit. Sem esse arquivo, usa a mensagem
+// do commit e marca como "resumo técnico". Data, hora, autor e número do PR vêm do git.
+
+/** Endereço web do repositório, para montar o link do PR (GitHub ou Azure DevOps). */
+function enderecoRepositorio() {
+  if (process.env.ATLAS_REPO_URL) return process.env.ATLAS_REPO_URL.replace(/\/$/, "");
+  const remoto = git(["remote", "get-url", "origin"]);
+  const github = remoto.match(/github\.com[:/](.+?)(\.git)?$/);
+  if (github) return `https://github.com/${github[1]}`;
+  const azure = remoto.match(/dev\.azure\.com[:/](?:v3\/)?(.+?)$/);
+  if (azure) return `https://dev.azure.com/${azure[1].replace(/^([^/]+)\/([^/]+)\/([^/]+)$/, "$1/$2/_git/$3")}`;
+  return null;
+}
+const REPOSITORIO = enderecoRepositorio();
+
+function linkDoPr(numero) {
+  if (!REPOSITORIO || !numero) return null;
+  return REPOSITORIO.includes("dev.azure.com") ? `${REPOSITORIO}/pullrequest/${numero}` : `${REPOSITORIO}/pull/${numero}`;
+}
+
+/** "# Título\n\ntexto" → { titulo, resumo } */
+function lerResumo(arquivo) {
+  const [primeira = "", ...resto] = readFileSync(arquivo, "utf8").trim().split("\n");
+  return { titulo: primeira.replace(/^#\s*/, "").trim(), resumo: resto.join("\n").trim() };
+}
+
+function historicoDoPrototipo(caminho, site, id) {
+  const saida = git(["log", "--name-status", "--format=@@%h%x1f%aN%x1f%cI%x1f%s", "--", caminho]);
+  const entradas = [];
+  const usados = new Set();
+  for (const bloco of saida.split("@@").filter(Boolean)) {
+    const [cabecalho, ...linhas] = bloco.trim().split("\n");
+    const [sha, autor, data, assunto] = cabecalho.split("\x1f");
+    const pr = Number(assunto.match(/\(#(\d+)\)\s*$/)?.[1]) || null;
+    const adicionados = linhas
+      .map((l) => l.split("\t"))
+      .filter(([status, arq]) => status === "A" && arq?.startsWith(`${caminho}/historico/`) && arq.endsWith(".md"))
+      .map(([, arq]) => arq);
+    const prints = prints_de(site, id, sha);
+    const base = { sha, data, autor, pr, prUrl: linkDoPr(pr), prints };
+    const existentes = adicionados.filter((arq) => existsSync(join(RAIZ, arq)));
+    if (existentes.length) {
+      for (const arq of existentes) {
+        usados.add(arq);
+        entradas.push({ ...base, ...lerResumo(join(RAIZ, arq)), tecnico: false });
+      }
+    } else {
+      entradas.push({ ...base, titulo: assunto.replace(/\s*\(#\d+\)\s*$/, ""), resumo: "", tecnico: true });
+    }
+  }
+  // Resumos ainda não commitados (trabalho local ou PR em preparação)
+  const dir = join(RAIZ, caminho, "historico");
+  if (existsSync(dir)) {
+    for (const nome of readdirSync(dir).filter((n) => n.endsWith(".md")).sort().reverse()) {
+      const arq = `${caminho}/historico/${nome}`;
+      if (usados.has(arq) || git(["log", "-1", "--format=%h", "--", arq])) continue;
+      entradas.unshift({ sha: null, data: null, autor: null, pr: null, prUrl: null, prints: [], ...lerResumo(join(RAIZ, arq)), tecnico: false });
+    }
+  }
+  return entradas;
+}
+
+/** Prints de "como ficou" após a mudança, gravados pelo CI em <site>/p/<id>/historico/<sha>/*.png */
+function prints_de(site, id, sha) {
+  if (!site) return [];
+  const dir = join(site, "p", id, "historico", sha);
+  return existsSync(dir)
+    ? readdirSync(dir).filter((n) => n.endsWith(".png")).sort().map((n) => `p/${id}/historico/${sha}/${n}`)
+    : [];
+}
+
 const subpastas = (dir) =>
   existsSync(dir)
     ? readdirSync(dir, { withFileTypes: true }).filter((d) => d.isDirectory() && !d.name.startsWith(".")).map((d) => d.name)
@@ -115,6 +188,7 @@ for (const programa of subpastas(PASTA_PROTOTIPOS)) {
         mapaUrl: base + dados.mapa,
         miniatura: site && existsSync(join(site, base, "miniatura.png")) ? base + "miniatura.png" : null,
         git: historico(caminho),
+        historico: historicoDoPrototipo(caminho, site, id),
       });
     }
   }
@@ -138,6 +212,7 @@ const catalogo = {
   ambiente: process.env.ATLAS_AMBIENTE || "local",
   ref: process.env.ATLAS_REF || git(["rev-parse", "--abbrev-ref", "HEAD"]) || null,
   commit: git(["rev-parse", "--short", "HEAD"]) || null,
+  repositorio: REPOSITORIO,
   programas,
   prototipos,
   emAndamento,

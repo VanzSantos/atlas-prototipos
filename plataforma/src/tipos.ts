@@ -19,6 +19,20 @@ export interface Historico {
   autores: string[];
 }
 
+export interface EntradaHistorico {
+  /** null = ainda não commitado (trabalho local). */
+  sha: string | null;
+  data: string | null;
+  autor: string | null;
+  pr: number | null;
+  prUrl: string | null;
+  titulo: string;
+  resumo: string;
+  /** true = sem resumo escrito; o título é a mensagem técnica do commit. */
+  tecnico: boolean;
+  prints: string[];
+}
+
 export interface Prototipo {
   id: string; // programa/projeto/nome
   nome: string;
@@ -40,6 +54,7 @@ export interface Prototipo {
   mapaUrl: string;
   miniatura: string | null;
   git: Historico;
+  historico: EntradaHistorico[];
 }
 
 export interface Projeto {
@@ -90,6 +105,12 @@ export const STATUS_COR: Record<Status, "neutral" | "info" | "warning" | "succes
   aprovado: "success",
   arquivado: "dark",
 };
+
+export function formatarDataHora(iso: string | null): string {
+  return iso
+    ? new Date(iso).toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" })
+    : "—";
+}
 
 export function formatarData(iso: string | null): string {
   return iso ? new Date(iso).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" }) : "—";

@@ -42,6 +42,9 @@ Guia curto para quem vai adicionar ou mudar um protótipo. Não precisa saber Gi
    - o **mapa do fluxo** (`mapa/index.html`), com toda a navegação.
 
    Mantenha também o `prototype.json` atualizado. O Codex e o Claude já sabem disso pelo AGENTS.md.
+   - **Histórico:** em toda mudança, crie um arquivo novo `historico/AAAA-MM-DD-descricao.md` na
+     pasta do protótipo, com um título (`# ...`) e um resumo em linguagem simples do que mudou.
+     Ele aparece na aba **Histórico** do Atlas, com a data, a hora e quem fez (isso vem do git).
 5. **Valide localmente** (precisa do Node 20 ou mais novo):
    ```bash
    npm run validar
