@@ -150,7 +150,10 @@ function Acoes({ prototipo: p, compacto }: { prototipo: Prototipo; compacto?: bo
   );
 }
 
-/** Cartão no estilo "mídia + conteúdo": imagem com selo, título, descrição, metadados e ações. */
+/**
+ * Cartão no estilo "mídia + conteúdo". O cartão inteiro roda o protótipo numa nova aba
+ * (o link do título se estende sobre o cartão); Canvas e Mapa ficam por cima, no rodapé.
+ */
 function Cartao({ prototipo: p, origem }: { prototipo: Prototipo; origem?: string }) {
   const MAX_TAGS = 2;
   const tags = p.tags.slice(0, MAX_TAGS);
@@ -158,18 +161,25 @@ function Cartao({ prototipo: p, origem }: { prototipo: Prototipo; origem?: strin
 
   return (
     <article className="atlas-cartao">
-      <a className="atlas-miniatura" href={hrefPrototipo(p.id)} aria-label={`Abrir ${p.fluxo} no Atlas`}>
+      <div className="atlas-miniatura">
         {p.miniatura ? <img src={p.miniatura} alt="" loading="lazy" /> : <span>Sem miniatura</span>}
         <span className={`atlas-selo atlas-selo-${p.status}`}>
           <span className="atlas-selo-ponto" aria-hidden="true" />
           {STATUS_ROTULO[p.status]}
         </span>
-      </a>
+        <span className="atlas-play" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z" />
+          </svg>
+        </span>
+      </div>
 
       <div className="atlas-cartao-texto">
         {origem && <p className="atlas-sobretitulo">{origem}</p>}
         <h2 className="atlas-cartao-titulo">
-          <a href={hrefPrototipo(p.id)}>{p.fluxo}</a>
+          <a className="atlas-cartao-link" href={p.url} target="_blank" rel="noreferrer" aria-label={`Rodar o protótipo ${p.fluxo} numa nova aba`}>
+            {p.fluxo}
+          </a>
         </h2>
         <p className="atlas-cartao-descricao">{p.descricao || (p.modulo ? `Módulo ${p.modulo}` : "Sem descrição")}</p>
       </div>
@@ -205,14 +215,11 @@ function Cartao({ prototipo: p, origem }: { prototipo: Prototipo; origem?: strin
       )}
 
       <div className="atlas-cartao-acoes">
-        <a className="atlas-botao atlas-botao-principal" href={p.url} target="_blank" rel="noreferrer" title="Abre o protótipo navegável numa nova aba">
-          Rodar protótipo ↗
-        </a>
         <a className="atlas-botao atlas-botao-sutil" href={p.canvasUrl} target="_blank" rel="noreferrer" title="Telas estáticas com anotações">
-          Canvas
+          Canvas ↗
         </a>
         <a className="atlas-botao atlas-botao-sutil" href={p.mapaUrl} target="_blank" rel="noreferrer" title="Mapa de navegação do fluxo">
-          Mapa
+          Mapa ↗
         </a>
       </div>
     </article>
