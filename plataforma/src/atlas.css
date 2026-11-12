@@ -66,18 +66,6 @@ a {
   line-height: var(--texto-micro-line-height);
 }
 
-.atlas-filtros {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-  gap: var(--espaco-m);
-  align-items: end;
-  margin-bottom: var(--espaco-g);
-}
-
-.atlas-busca {
-  grid-column: 1 / -1;
-}
-
 /* Links com aparência de botão (o Button do SeleneSDK é <button>, e aqui precisamos de <a>). */
 .atlas-botao {
   display: inline-flex;
@@ -173,11 +161,6 @@ a {
 .atlas-sobretitulo {
   text-transform: uppercase;
   letter-spacing: 0.04em;
-}
-
-.atlas-limpar {
-  display: flex;
-  align-items: flex-end;
 }
 
 /* Grade de miniaturas */
@@ -409,78 +392,6 @@ a {
   font-weight: 500;
 }
 
-.atlas-acoes {
-  display: flex;
-  gap: var(--espaco-p);
-  flex-wrap: wrap;
-  margin-top: auto;
-  padding-top: var(--espaco-p);
-}
-
-.atlas-acoes-compactas {
-  margin: 0;
-  padding: 0;
-  flex-wrap: nowrap;
-  justify-content: flex-end;
-}
-
-.atlas-acoes-compactas .atlas-botao {
-  padding: var(--espaco-xp) var(--espaco-p);
-}
-
-/* Lista (tabela) */
-.atlas-tabela-moldura {
-  overflow-x: auto;
-  border: 1px solid var(--borda-base);
-  border-radius: var(--raio-p);
-  background: var(--fundo-superficie);
-}
-
-:root[data-theme="dark"] .atlas-tabela-moldura {
-  background: var(--fundo-secundario);
-}
-
-.atlas-tabela {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.atlas-tabela th,
-.atlas-tabela td {
-  padding: var(--espaco-p) var(--espaco-m);
-  text-align: left;
-  border-bottom: 1px solid var(--borda-base);
-  white-space: nowrap;
-}
-
-.atlas-tabela tbody tr:last-child td {
-  border-bottom: 0;
-}
-
-.atlas-tabela th {
-  color: var(--texto-secundario);
-  font-size: var(--texto-micro-size);
-  font-weight: 600;
-}
-
-.atlas-tabela-fluxo {
-  display: block;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.atlas-tabela-fluxo:hover {
-  text-decoration: underline;
-}
-
-.atlas-oculto {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-}
-
 /* Visualizador */
 .atlas-barra-abas {
   padding: 0 var(--espaco-m);
@@ -491,4 +402,13 @@ a {
 /* Respiro no fim do cartão (o último bloco pode ser as tags ou os metadados). */
 .atlas-cartao > :last-child {
   margin-bottom: var(--espaco-xp);
+}
+
+/* Cabeçalho da barra lateral: marca e, logo abaixo, a busca */
+.atlas-nav-cabecalho {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-m);
+  flex: 1;
+  min-width: 0;
 }

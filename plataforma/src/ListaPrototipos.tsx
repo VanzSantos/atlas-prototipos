@@ -1,35 +1,7 @@
-import { useMemo } from "react";
-import { Select, type SelectOption } from "selenesdk/src/components/Select/Select";
-import { TextField } from "selenesdk/src/components/TextField/TextField";
-import { SegmentedControl } from "selenesdk/src/components/SegmentedControl/SegmentedControl";
 import { Icon } from "selenesdk/src/components/Icon/Icon";
-import { Badge } from "selenesdk/src/components/Badge/Badge";
 import { EmptyState } from "selenesdk/src/components/EmptyState/EmptyState";
-import { Button } from "selenesdk/src/components/Button/Button";
-import { hrefPrototipo, lembrarVista, type CampoFiltro, type Filtros, type Vista } from "./rotas";
-import { STATUS_COR, STATUS_ROTULO, formatarData, type Catalogo, type Prototipo, type Status } from "./tipos";
-
-/** O Select não mostra rótulo para valor vazio, então "Todos" usa um valor próprio. */
-const TODOS = "*";
-
-const normalizar = (t: string) => t.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
-
-function opcoes(valores: Iterable<string>, rotulo: (v: string) => string = (v) => v): SelectOption[] {
-  const unicos = [...new Set(valores)].filter(Boolean).sort((a, b) => a.localeCompare(b));
-  return [{ value: TODOS, label: "Todos" }, ...unicos.map((v) => ({ value: v, label: rotulo(v) }))];
-}
-
-function combina(p: Prototipo, f: Filtros) {
-  if (f.modulo && p.modulo !== f.modulo) return false;
-  if (f.status && p.status !== f.status) return false;
-  if (f.dono && !p.donos.includes(f.dono)) return false;
-  if (f.tag && !p.tags.includes(f.tag)) return false;
-  if (f.busca) {
-    const alvo = normalizar([p.fluxo, p.descricao, p.modulo, p.git.alteradoPor ?? "", ...p.tags].join(" "));
-    if (!normalizar(f.busca).split(/\s+/).every((termo) => alvo.includes(termo))) return false;
-  }
-  return true;
-}
+import { hrefPrototipo } from "./rotas";
+import { STATUS_ROTULO, formatarData, type Catalogo, type Prototipo } from "./tipos";
 
 interface Props {
   catalogo: Catalogo;
@@ -37,25 +9,12 @@ interface Props {
   titulo: string;
   subtitulo?: string;
   prototipos: Prototipo[];
-  /** Mostra "Programa › Projeto" em cada item (útil em Recentes). */
+  /** Mostra "Programa › Projeto" em cada cartão (útil em Recentes e na busca). */
   mostrarOrigem?: boolean;
-  vista: Vista;
-  filtros: Filtros;
-  href: (vista: Vista, filtros: Partial<Filtros>) => string;
+  vazio?: { titulo: string; descricao: string };
 }
 
-export function ListaPrototipos({ catalogo, sobretitulo, titulo, subtitulo, prototipos, mostrarOrigem, vista, filtros, href }: Props) {
-  const lista = useMemo(() => prototipos.filter((p) => combina(p, filtros)), [prototipos, filtros]);
-  const temFiltro = Object.values(filtros).some(Boolean);
-  const temModulo = prototipos.some((p) => p.modulo);
-
-  const ir = (v: Vista, f: Partial<Filtros>) => (window.location.hash = href(v, f));
-  const mudar = (campo: CampoFiltro, valor: string) => ir(vista, { ...filtros, [campo]: valor === TODOS ? "" : valor });
-  const mudarVista = (v: string) => {
-    lembrarVista(v as Vista);
-    ir(v as Vista, filtros);
-  };
-
+export function ListaPrototipos({ catalogo, sobretitulo, titulo, subtitulo, prototipos, mostrarOrigem, vazio }: Props) {
   const origem = (p: Prototipo) => {
     const programa = catalogo.programas.find((x) => x.id === p.programa);
     const projeto = programa?.projetos.find((x) => x.id === `${p.programa}/${p.projeto}`);
@@ -70,90 +29,30 @@ export function ListaPrototipos({ catalogo, sobretitulo, titulo, subtitulo, prot
           <h1 className="atlas-titulo">{titulo}</h1>
           <p className="atlas-subtitulo">
             {subtitulo ? `${subtitulo} · ` : ""}
-            {lista.length} protótipo(s)
+            {prototipos.length} protótipo(s)
           </p>
         </div>
-        <SegmentedControl
-          accessibleLabel="Forma de visualizar"
-          value={vista}
-          onChange={mudarVista}
-          items={[
-            { value: "grade", label: "Miniaturas", icon: "image" },
-            { value: "lista", label: "Lista", icon: "rows" },
-          ]}
-        />
       </header>
 
-      <section className="atlas-filtros" aria-label="Filtros">
-        <div className="atlas-busca">
-          <TextField
-            accessibleLabel="Buscar protótipos"
-            placeholder="Buscar por fluxo, descrição, tag ou pessoa"
-            leftIcon="magnifying-glass"
-            value={filtros.busca}
-            onChange={(v) => mudar("busca", v)}
-          />
-        </div>
-        {temModulo && (
-          <Select label="Módulo" options={opcoes(prototipos.map((p) => p.modulo))} value={filtros.modulo || TODOS} onChange={(v) => mudar("modulo", v)} />
-        )}
-        <Select
-          label="Status"
-          options={opcoes(prototipos.map((p) => p.status), (v) => STATUS_ROTULO[v as Status])}
-          value={filtros.status || TODOS}
-          onChange={(v) => mudar("status", v)}
-        />
-        <Select label="Dono" options={opcoes(prototipos.flatMap((p) => p.donos))} value={filtros.dono || TODOS} onChange={(v) => mudar("dono", v)} />
-        <Select label="Tag" options={opcoes(prototipos.flatMap((p) => p.tags))} value={filtros.tag || TODOS} onChange={(v) => mudar("tag", v)} />
-        {temFiltro && (
-          <div className="atlas-limpar">
-            <Button variant="subtle" label="Limpar filtros" leftIcon="x" onPress={() => ir(vista, {})} />
-          </div>
-        )}
-      </section>
-
-      {lista.length === 0 ? (
+      {prototipos.length === 0 ? (
         <EmptyState
           icon="magnifying-glass"
-          title={prototipos.length ? "Nenhum protótipo com esses filtros" : "Nenhum protótipo ainda"}
-          description={prototipos.length ? "Tente remover algum filtro." : "Crie a pasta do primeiro protótipo seguindo o CONTRIBUTING.md."}
+          title={vazio?.titulo ?? "Nenhum protótipo ainda"}
+          description={vazio?.descricao ?? "Crie a pasta do primeiro protótipo seguindo o CONTRIBUTING.md."}
         />
-      ) : vista === "grade" ? (
+      ) : (
         <ul className="atlas-grade">
-          {lista.map((p) => (
+          {prototipos.map((p) => (
             <li key={p.id}>
               <Cartao prototipo={p} origem={mostrarOrigem ? origem(p) : undefined} />
             </li>
           ))}
         </ul>
-      ) : (
-        <Tabela prototipos={lista} origem={mostrarOrigem ? origem : undefined} />
       )}
     </div>
   );
 }
 
-/** Ações da lista: abrem o visualizador do Atlas já na aba certa. */
-function Acoes({ prototipo: p }: { prototipo: Prototipo }) {
-  return (
-    <div className="atlas-acoes atlas-acoes-compactas">
-      <a className="atlas-botao" href={hrefPrototipo(p.id)}>
-        Rodar
-      </a>
-      <a className="atlas-botao atlas-botao-sutil" href={hrefPrototipo(p.id, "canvas")}>
-        Canvas
-      </a>
-      <a className="atlas-botao atlas-botao-sutil" href={hrefPrototipo(p.id, "mapa")}>
-        Mapa
-      </a>
-    </div>
-  );
-}
-
-/**
- * Cartão no estilo "mídia + conteúdo". O cartão inteiro abre o protótipo no visualizador
- * do Atlas (o link do título se estende sobre o cartão), onde ficam Protótipo, Canvas e Mapa.
- */
 /** Dispositivo vem das tags: "desktop" ou "mobile". */
 const DISPOSITIVOS = { desktop: "Desktop", mobile: "Mobile" } as const;
 
@@ -162,6 +61,10 @@ function dispositivo(p: Prototipo) {
   return tag ? { tag, rotulo: DISPOSITIVOS[tag] } : null;
 }
 
+/**
+ * Cartão no estilo "mídia + conteúdo". O cartão inteiro abre o protótipo no visualizador
+ * do Atlas (o link do título se estende sobre o cartão), onde ficam Protótipo, Canvas e Mapa.
+ */
 function Cartao({ prototipo: p, origem }: { prototipo: Prototipo; origem?: string }) {
   const disp = dispositivo(p);
 
@@ -196,13 +99,13 @@ function Cartao({ prototipo: p, origem }: { prototipo: Prototipo; origem?: strin
       </div>
 
       <ul className="atlas-cartao-meta">
-        <li title="Criação">
+        <li>
           <Icon name="star" size="small" color="var(--icone-secundario)" decorative={false} accessibleLabel="Criado por" />
           <span>
             <strong>{p.git.criadoPor ?? "—"}</strong> em {formatarData(p.git.criadoEm)}
           </span>
         </li>
-        <li title="Última atualização">
+        <li>
           <Icon name="clock" size="small" color="var(--icone-secundario)" decorative={false} accessibleLabel="Atualizado por" />
           <span>
             <strong>{p.git.alteradoPor ?? "—"}</strong> em {formatarData(p.git.atualizadoEm)}
@@ -210,49 +113,5 @@ function Cartao({ prototipo: p, origem }: { prototipo: Prototipo; origem?: strin
         </li>
       </ul>
     </article>
-  );
-}
-
-function Tabela({ prototipos, origem }: { prototipos: Prototipo[]; origem?: (p: Prototipo) => string }) {
-  return (
-    <div className="atlas-tabela-moldura">
-      <table className="atlas-tabela">
-        <thead>
-          <tr>
-            <th>Fluxo</th>
-            {origem && <th>Programa › Projeto</th>}
-            <th>Status</th>
-            <th>Criado em</th>
-            <th>Alterado em</th>
-            <th>Alterado por</th>
-            <th>
-              <span className="atlas-oculto">Ações</span>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {prototipos.map((p) => (
-            <tr key={p.id}>
-              <td>
-                <a className="atlas-tabela-fluxo" href={hrefPrototipo(p.id)}>
-                  {p.fluxo}
-                </a>
-                {p.modulo && <span className="atlas-meta">{p.modulo}</span>}
-              </td>
-              {origem && <td className="atlas-meta">{origem(p)}</td>}
-              <td>
-                <Badge variant={STATUS_COR[p.status]} label={STATUS_ROTULO[p.status]} />
-              </td>
-              <td>{formatarData(p.git.criadoEm)}</td>
-              <td>{formatarData(p.git.atualizadoEm)}</td>
-              <td>{p.git.alteradoPor ?? "—"}</td>
-              <td>
-                <Acoes prototipo={p} />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
   );
 }

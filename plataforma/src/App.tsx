@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { SideNav, type SideNavItem } from "selenesdk/src/components/SideNav/SideNav";
 import { EmptyState } from "selenesdk/src/components/EmptyState/EmptyState";
 import { Spinner } from "selenesdk/src/components/Spinner/Spinner";
+import { TextField } from "selenesdk/src/components/TextField/TextField";
 import { Marca } from "./Marca";
 import { ListaPrototipos } from "./ListaPrototipos";
 import { Visualizador } from "./Visualizador";
-import { hrefProjeto, hrefRecentes, useRota, type Rota } from "./rotas";
-import type { Catalogo } from "./tipos";
+import { hrefBusca, hrefProjeto, hrefRecentes, substituirRota, useRota, type Rota } from "./rotas";
+import type { Catalogo, Prototipo } from "./tipos";
 
 type Estado = { tipo: "carregando" } | { tipo: "erro"; mensagem: string } | { tipo: "pronto"; catalogo: Catalogo };
 
@@ -55,24 +56,47 @@ export function App() {
     <div className="atlas-layout">
       <Navegacao catalogo={catalogo} rota={rota} />
       <main className="atlas-principal">
-        {rota.tipo === "recentes" ? (
+        {rota.tipo === "recentes" && (
           <ListaPrototipos
-            key="recentes"
             catalogo={catalogo}
             titulo="Recentes"
             subtitulo="Protótipos alterados por último, em todos os programas"
             prototipos={recentes(catalogo).slice(0, QUANTIDADE_RECENTES)}
             mostrarOrigem
-            vista={rota.vista}
-            filtros={rota.filtros}
-            href={(vista, filtros) => hrefRecentes(vista, filtros)}
           />
-        ) : (
-          <PaginaProjeto catalogo={catalogo} rota={rota} />
         )}
+        {rota.tipo === "busca" && (
+          <ListaPrototipos
+            catalogo={catalogo}
+            titulo={`Resultados para “${rota.termo}”`}
+            subtitulo="Em todos os programas"
+            prototipos={buscar(catalogo, rota.termo)}
+            mostrarOrigem
+            vazio={{ titulo: "Nada encontrado", descricao: "Tente outro termo: nome do fluxo, projeto, programa, tag ou pessoa." }}
+          />
+        )}
+        {rota.tipo === "projeto" && <PaginaProjeto catalogo={catalogo} rota={rota} />}
       </main>
     </div>
   );
+}
+
+const normalizar = (t: string) => t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+/** Busca genérica: fluxo, descrição, módulo, programa, projeto, tags e pessoas. Todos os termos precisam aparecer. */
+function buscar(catalogo: Catalogo, termo: string): Prototipo[] {
+  const termos = normalizar(termo).split(/\s+/).filter(Boolean);
+  const nomes = new Map<string, string>();
+  for (const prog of catalogo.programas) {
+    nomes.set(prog.id, prog.nome);
+    for (const proj of prog.projetos) nomes.set(proj.id, proj.nome);
+  }
+  return recentes(catalogo).filter((p) => {
+    const alvo = normalizar(
+      [p.fluxo, p.descricao, p.modulo, nomes.get(p.programa), nomes.get(`${p.programa}/${p.projeto}`), ...p.tags, ...p.git.autores, ...p.donos].join(" ")
+    );
+    return termos.every((t) => alvo.includes(t));
+  });
 }
 
 /** Mais recentes primeiro. O que ainda não foi commitado (trabalho local) vem no topo. */
@@ -102,15 +126,11 @@ function PaginaProjeto({ catalogo, rota }: { catalogo: Catalogo; rota: Extract<R
 
   return (
     <ListaPrototipos
-      key={rota.id}
       catalogo={catalogo}
       sobretitulo={programa.nome}
       titulo={projeto.nome}
       subtitulo={projeto.descricao}
       prototipos={catalogo.prototipos.filter((p) => `${p.programa}/${p.projeto}` === rota.id)}
-      vista={rota.vista}
-      filtros={rota.filtros}
-      href={(vista, filtros) => hrefProjeto(rota.id, vista, filtros)}
     />
   );
 }
@@ -140,5 +160,21 @@ function Navegacao({ catalogo, rota }: { catalogo: Catalogo; rota: Rota }) {
   // Começa com a categoria e todos os programas abertos.
   const [abertos, setAbertos] = useState<string[]>(() => ["programas", ...catalogo.programas.map((p) => `programa:${p.id}`)]);
 
-  return <SideNav items={itens} openKeys={abertos} onOpenKeysChange={setAbertos} accessibleLabel="Navegação do Atlas" header={<Marca />} />;
+  const termo = rota.tipo === "busca" ? rota.termo : "";
+  const cabecalho = (
+    <div className="atlas-nav-cabecalho">
+      <Marca />
+      <div role="search">
+        <TextField
+          accessibleLabel="Buscar protótipos"
+          placeholder="Buscar"
+          leftIcon="magnifying-glass"
+          value={termo}
+          onChange={(v) => substituirRota(hrefBusca(v.trimStart()))}
+        />
+      </div>
+    </div>
+  );
+
+  return <SideNav items={itens} openKeys={abertos} onOpenKeysChange={setAbertos} accessibleLabel="Navegação do Atlas" header={cabecalho} />;
 }
