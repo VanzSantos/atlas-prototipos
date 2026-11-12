@@ -152,9 +152,10 @@ a {
 }
 
 /* Página de lista */
+/* Ocupa toda a largura disponível ao lado da barra lateral. */
 .atlas-pagina {
-  max-width: 1280px;
-  margin: 0 auto;
+  box-sizing: border-box;
+  width: 100%;
   padding: var(--espaco-g);
 }
 
