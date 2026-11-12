@@ -90,12 +90,12 @@ function Cartao({ prototipo: p, origem }: { prototipo: Prototipo; origem?: strin
       </div>
 
       <div className="atlas-cartao-texto">
-        {origem && <p className="atlas-sobretitulo">{origem}</p>}
         <h2 className="atlas-cartao-titulo">
           <a className="atlas-cartao-link" href={hrefPrototipo(p.id)} aria-label={`Rodar o protótipo ${p.fluxo}`}>
             {p.fluxo}
           </a>
         </h2>
+        {origem && <p className="atlas-sobretitulo">{origem}</p>}
       </div>
 
       <ul className="atlas-cartao-meta">
