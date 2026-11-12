@@ -89,3 +89,8 @@ export const STATUS_COR: Record<Status, "neutral" | "info" | "warning" | "succes
 export function formatarData(iso: string | null): string {
   return iso ? new Date(iso).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" }) : "—";
 }
+
+/** Versão curta para espaços apertados: 12/11/26. */
+export function formatarDataCurta(iso: string | null): string {
+  return iso ? new Date(iso).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "2-digit" }) : "—";
+}

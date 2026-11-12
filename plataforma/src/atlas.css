@@ -41,8 +41,6 @@ a {
   padding: var(--espaco-g);
 }
 
-
-
 .atlas-cabecalho {
   display: flex;
   justify-content: space-between;
@@ -58,7 +56,6 @@ a {
   font-weight: var(--texto-g-forte-weight);
   line-height: var(--texto-g-forte-line-height);
 }
-
 
 .atlas-subtitulo,
 .atlas-meta,
@@ -80,31 +77,6 @@ a {
 .atlas-busca {
   grid-column: 1 / -1;
 }
-
-
-
-
-
-.atlas-cartao-titulo {
-  margin: 0;
-  font-family: var(--texto-m-forte-family);
-  font-size: var(--texto-m-forte-size);
-  font-weight: var(--texto-m-forte-weight);
-  line-height: var(--texto-m-forte-line-height);
-}
-
-.atlas-cartao-titulo a {
-  text-decoration: none;
-}
-
-.atlas-cartao-titulo a:hover {
-  text-decoration: underline;
-}
-
-
-
-
-
 
 /* Links com aparência de botão (o Button do SeleneSDK é <button>, e aqui precisamos de <a>). */
 .atlas-botao {
@@ -134,7 +106,6 @@ a {
 .atlas-botao-sutil:hover {
   background: var(--acao-sutil-sobreposta);
 }
-
 
 .atlas-visualizador {
   display: flex;
@@ -227,20 +198,41 @@ a {
 .atlas-cartao {
   display: flex;
   flex-direction: column;
-  gap: var(--espaco-p);
   height: 100%;
+  box-sizing: border-box;
+  padding: var(--espaco-p);
+  border-radius: 20px;
+  background: var(--fundo-superficie);
+  border: 1px solid var(--borda-base);
+  box-shadow: var(--sombra-pp);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
+.atlas-cartao:hover {
+  box-shadow: var(--sombra-m);
+  transform: translateY(-2px);
+}
+
+:root[data-theme="dark"] .atlas-cartao {
+  background: var(--fundo-secundario);
+}
+
+/* Imagem com cantos arredondados e o selo de status por cima */
 .atlas-miniatura {
+  position: relative;
   display: grid;
   place-items: center;
   aspect-ratio: 16 / 10;
   overflow: hidden;
-  border-radius: var(--raio-p);
-  border: 1px solid var(--borda-base);
+  border-radius: 14px;
   background: var(--fundo-secundario);
   color: var(--texto-secundario);
   font-size: var(--texto-micro-size);
+  text-decoration: none;
+}
+
+:root[data-theme="dark"] .atlas-miniatura {
+  background: var(--fundo-superficie);
 }
 
 .atlas-miniatura img {
@@ -248,45 +240,172 @@ a {
   height: 100%;
   object-fit: cover;
   object-position: top center;
-  transition: transform 0.2s ease;
+  transition: transform 0.4s ease;
 }
 
-.atlas-miniatura:hover img {
+.atlas-cartao:hover .atlas-miniatura img {
   transform: scale(1.03);
 }
 
-.atlas-cartao-corpo {
+.atlas-selo {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #111827;
+  font-size: var(--texto-micro-size);
+  font-weight: 500;
+  line-height: 1.4;
+  box-shadow: 0 1px 2px rgba(17, 24, 39, 0.12);
+  backdrop-filter: blur(6px);
+}
+
+.atlas-selo-ponto {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #9ca3af;
+}
+
+.atlas-selo-em-andamento .atlas-selo-ponto { background: #2563eb; }
+.atlas-selo-em-revisao .atlas-selo-ponto { background: #d97706; }
+.atlas-selo-aprovado .atlas-selo-ponto { background: #16a34a; }
+.atlas-selo-arquivado .atlas-selo-ponto { background: #4b5563; }
+
+/* Texto */
+.atlas-cartao-texto {
   display: flex;
   flex-direction: column;
-  gap: var(--espaco-p);
-  flex: 1;
-  padding: var(--espaco-xp);
+  gap: 4px;
+  padding: var(--espaco-m) var(--espaco-xp) var(--espaco-p);
 }
 
-.atlas-cartao-topo {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: var(--espaco-p);
-}
-
-.atlas-detalhes {
-  display: grid;
-  grid-template-columns: repeat(3, auto);
-  justify-content: start;
-  gap: var(--espaco-m);
+.atlas-cartao-titulo {
   margin: 0;
+  font-family: var(--texto-m-forte-family);
+  font-size: var(--texto-m-forte-size);
+  font-weight: var(--texto-m-forte-weight);
+  line-height: var(--texto-m-forte-line-height);
+  letter-spacing: -0.01em;
 }
 
-.atlas-detalhes dt {
+.atlas-cartao-titulo a {
+  text-decoration: none;
+}
+
+.atlas-cartao-titulo a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.atlas-cartao-descricao {
+  margin: 0;
   color: var(--texto-secundario);
+  font-size: var(--texto-p-size);
+  line-height: var(--texto-p-line-height);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Linha de metadados entre divisórias */
+.atlas-cartao-meta {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  margin: var(--espaco-p) var(--espaco-xp) 0;
+  padding: var(--espaco-p) 0;
+  border-top: 1px solid var(--borda-base);
+  border-bottom: 1px solid var(--borda-base);
+}
+
+.atlas-cartao-meta > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 2px var(--espaco-p);
+}
+
+.atlas-cartao-meta > div:first-child {
+  justify-content: flex-start;
+  padding-left: 0;
+}
+
+.atlas-cartao-meta > div:last-child {
+  justify-content: flex-end;
+  padding-right: 0;
+}
+
+.atlas-cartao-meta > div + div {
+  border-left: 1px solid var(--borda-base);
+}
+
+.atlas-cartao-meta dt {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.atlas-cartao-meta dd {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--texto-micro-size);
+  font-weight: 500;
+}
+
+/* Tags em pílulas suaves */
+.atlas-cartao-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: var(--espaco-m) var(--espaco-xp) 0;
+  padding: 0;
+  list-style: none;
+}
+
+.atlas-cartao-tags li {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--acao-sutil);
+  color: var(--texto-primario);
   font-size: var(--texto-micro-size);
 }
 
-.atlas-detalhes dd {
-  margin: 0;
-  font-size: var(--texto-micro-size);
-  font-weight: 600;
+/* Ações: principal ocupa o espaço, secundárias ao lado */
+.atlas-cartao-acoes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--espaco-p);
+  margin-top: auto;
+  padding: var(--espaco-m) var(--espaco-xp) var(--espaco-xp);
+}
+
+.atlas-botao-principal {
+  grid-column: 1 / -1;
+  background: linear-gradient(180deg, #374151 0%, #111827 100%);
+  color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 1px 2px rgba(17, 24, 39, 0.2);
+}
+
+.atlas-botao-principal:hover {
+  background: linear-gradient(180deg, #4b5563 0%, #1f2937 100%);
+}
+
+:root[data-theme="dark"] .atlas-botao-principal {
+  background: linear-gradient(180deg, #f9fafb 0%, #e5e7eb 100%);
+  color: #111827;
+}
+
+:root[data-theme="dark"] .atlas-botao-principal:hover {
+  background: #fff;
 }
 
 .atlas-acoes {

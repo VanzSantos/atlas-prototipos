@@ -2,12 +2,12 @@ import { useMemo } from "react";
 import { Select, type SelectOption } from "selenesdk/src/components/Select/Select";
 import { TextField } from "selenesdk/src/components/TextField/TextField";
 import { SegmentedControl } from "selenesdk/src/components/SegmentedControl/SegmentedControl";
-import { Card } from "selenesdk/src/components/Card/Card";
+import { Icon } from "selenesdk/src/components/Icon/Icon";
 import { Badge } from "selenesdk/src/components/Badge/Badge";
 import { EmptyState } from "selenesdk/src/components/EmptyState/EmptyState";
 import { Button } from "selenesdk/src/components/Button/Button";
 import { hrefPrototipo, lembrarVista, type CampoFiltro, type Filtros, type Vista } from "./rotas";
-import { STATUS_COR, STATUS_ROTULO, formatarData, type Catalogo, type Prototipo, type Status } from "./tipos";
+import { STATUS_COR, STATUS_ROTULO, formatarData, formatarDataCurta, type Catalogo, type Prototipo, type Status } from "./tipos";
 
 /** O Select não mostra rótulo para valor vazio, então "Todos" usa um valor próprio. */
 const TODOS = "*";
@@ -150,45 +150,72 @@ function Acoes({ prototipo: p, compacto }: { prototipo: Prototipo; compacto?: bo
   );
 }
 
-function Detalhes({ prototipo: p }: { prototipo: Prototipo }) {
-  return (
-    <dl className="atlas-detalhes">
-      <div>
-        <dt>Criado em</dt>
-        <dd>{formatarData(p.git.criadoEm)}</dd>
-      </div>
-      <div>
-        <dt>Alterado em</dt>
-        <dd>{formatarData(p.git.atualizadoEm)}</dd>
-      </div>
-      <div>
-        <dt>Alterado por</dt>
-        <dd>{p.git.alteradoPor ?? "—"}</dd>
-      </div>
-    </dl>
-  );
-}
-
+/** Cartão no estilo "mídia + conteúdo": imagem com selo, título, descrição, metadados e ações. */
 function Cartao({ prototipo: p, origem }: { prototipo: Prototipo; origem?: string }) {
+  const MAX_TAGS = 2;
+  const tags = p.tags.slice(0, MAX_TAGS);
+  const restantes = p.tags.length - tags.length;
+
   return (
-    <Card padding="small" elevation="low">
-      <article className="atlas-cartao">
-        <a className="atlas-miniatura" href={hrefPrototipo(p.id)} aria-label={`Abrir ${p.fluxo} no Atlas`}>
-          {p.miniatura ? <img src={p.miniatura} alt="" loading="lazy" /> : <span>Sem miniatura</span>}
-        </a>
-        <div className="atlas-cartao-corpo">
-          {origem && <p className="atlas-sobretitulo">{origem}</p>}
-          <div className="atlas-cartao-topo">
-            <h2 className="atlas-cartao-titulo">
-              <a href={hrefPrototipo(p.id)}>{p.fluxo}</a>
-            </h2>
-            <Badge variant={STATUS_COR[p.status]} label={STATUS_ROTULO[p.status]} />
-          </div>
-          <Detalhes prototipo={p} />
-          <Acoes prototipo={p} />
+    <article className="atlas-cartao">
+      <a className="atlas-miniatura" href={hrefPrototipo(p.id)} aria-label={`Abrir ${p.fluxo} no Atlas`}>
+        {p.miniatura ? <img src={p.miniatura} alt="" loading="lazy" /> : <span>Sem miniatura</span>}
+        <span className={`atlas-selo atlas-selo-${p.status}`}>
+          <span className="atlas-selo-ponto" aria-hidden="true" />
+          {STATUS_ROTULO[p.status]}
+        </span>
+      </a>
+
+      <div className="atlas-cartao-texto">
+        {origem && <p className="atlas-sobretitulo">{origem}</p>}
+        <h2 className="atlas-cartao-titulo">
+          <a href={hrefPrototipo(p.id)}>{p.fluxo}</a>
+        </h2>
+        <p className="atlas-cartao-descricao">{p.descricao || (p.modulo ? `Módulo ${p.modulo}` : "Sem descrição")}</p>
+      </div>
+
+      <dl className="atlas-cartao-meta">
+        <div title={`Criado em ${formatarData(p.git.criadoEm)}`}>
+          <dt>
+            <Icon name="calendar" size="small" color="var(--icone-secundario)" accessibleLabel="Criado em" decorative={false} />
+          </dt>
+          <dd>{formatarDataCurta(p.git.criadoEm)}</dd>
         </div>
-      </article>
-    </Card>
+        <div title={`Alterado em ${formatarData(p.git.atualizadoEm)}`}>
+          <dt>
+            <Icon name="clock" size="small" color="var(--icone-secundario)" accessibleLabel="Alterado em" decorative={false} />
+          </dt>
+          <dd>{formatarDataCurta(p.git.atualizadoEm)}</dd>
+        </div>
+        <div title={`Alterado por ${p.git.alteradoPor ?? "—"}`}>
+          <dt>
+            <Icon name="user" size="small" color="var(--icone-secundario)" accessibleLabel="Alterado por" decorative={false} />
+          </dt>
+          <dd>{p.git.alteradoPor ?? "—"}</dd>
+        </div>
+      </dl>
+
+      {p.tags.length > 0 && (
+        <ul className="atlas-cartao-tags" aria-label="Tags">
+          {tags.map((t) => (
+            <li key={t}>{t}</li>
+          ))}
+          {restantes > 0 && <li title={p.tags.slice(MAX_TAGS).join(", ")}>+{restantes}</li>}
+        </ul>
+      )}
+
+      <div className="atlas-cartao-acoes">
+        <a className="atlas-botao atlas-botao-principal" href={p.url} target="_blank" rel="noreferrer" title="Abre o protótipo navegável numa nova aba">
+          Rodar protótipo ↗
+        </a>
+        <a className="atlas-botao atlas-botao-sutil" href={p.canvasUrl} target="_blank" rel="noreferrer" title="Telas estáticas com anotações">
+          Canvas
+        </a>
+        <a className="atlas-botao atlas-botao-sutil" href={p.mapaUrl} target="_blank" rel="noreferrer" title="Mapa de navegação do fluxo">
+          Mapa
+        </a>
+      </div>
+    </article>
   );
 }
 
