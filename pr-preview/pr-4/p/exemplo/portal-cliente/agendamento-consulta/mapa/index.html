@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mapa do fluxo · Agendar consulta</title>
+  <style>
+    body { margin: 0; font-family: system-ui, sans-serif; background: #fff; color: #1d1d1f; }
+    header { padding: 16px 24px; border-bottom: 1px solid #d2d2d7; }
+    header h1 { margin: 0; font-size: 18px; } header p { margin: 4px 0 0; color: #6e6e73; font-size: 13px; }
+    svg { display: block; margin: 24px; max-width: calc(100% - 48px); height: auto; }
+    .no rect { fill: #f5f5f7; stroke: #1d1d1f; stroke-width: 1.5; rx: 10; }
+    .no.inicio rect { fill: #e6f0ff; stroke: #0a5cff; }
+    .no.fim rect { fill: #e8f7ee; stroke: #1a7f43; }
+    .no text { font-size: 14px; text-anchor: middle; dominant-baseline: middle; }
+    .seta { stroke: #6e6e73; stroke-width: 1.5; fill: none; marker-end: url(#ponta); }
+    .rotulo { font-size: 12px; fill: #6e6e73; text-anchor: middle; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Mapa do fluxo · Agendar consulta</h1>
+    <p>Toda a navegação do fluxo. Atualize sempre que uma tela ou caminho mudar.</p>
+  </header>
+  <svg viewBox="0 0 760 220" role="img" aria-label="Início, Escolher data, Confirmação; Voltar retorna a Escolher data">
+    <defs><marker id="ponta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#6e6e73"/></marker></defs>
+    <g class="no inicio"><rect x="10" y="80" width="140" height="56"/><text x="80" y="108">Home do app</text></g>
+    <g class="no"><rect x="300" y="80" width="160" height="56"/><text x="380" y="108">Escolher data</text></g>
+    <g class="no fim"><rect x="600" y="80" width="150" height="56"/><text x="675" y="108">Confirmação</text></g>
+    <path class="seta" d="M150 108H298"/><text class="rotulo" x="224" y="98">Agendar</text>
+    <path class="seta" d="M460 108H598"/><text class="rotulo" x="529" y="98">Escolhe horário</text>
+    <path class="seta" d="M675 136V180H380V138"/><text class="rotulo" x="528" y="196">Voltar</text>
+  </svg>
+</body>
+</html>
