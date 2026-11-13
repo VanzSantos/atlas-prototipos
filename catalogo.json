@@ -1,6 +1,6 @@
 {
   "versao": 1,
-  "geradoEm": "2026-11-13T11:55:12.009Z",
+  "geradoEm": "2026-11-13T11:57:37.264Z",
   "ambiente": "oficial",
   "ref": "main",
   "commit": "5aa2289",
@@ -165,5 +165,16 @@
       "emAndamento": []
     }
   ],
-  "emAndamento": []
+  "emAndamento": [
+    {
+      "numero": 5,
+      "titulo": "scripts: checagem do histórico considera mudanças ainda não commitadas",
+      "branch": "plataforma/checagem-historico-local",
+      "autor": "VanzSantos",
+      "url": "https://vanzsantos.github.io/atlas-prototipos/pr-preview/pr-5/",
+      "pastas": [
+        "scripts/lib/git.mjs"
+      ]
+    }
+  ]
 }
