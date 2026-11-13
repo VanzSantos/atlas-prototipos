@@ -1,0 +1,169 @@
+{
+  "versao": 1,
+  "geradoEm": "2026-11-13T11:56:56.129Z",
+  "ambiente": "preview",
+  "ref": "PR #5",
+  "commit": "6b09335",
+  "repositorio": "https://github.com/VanzSantos/atlas-prototipos",
+  "programas": [
+    {
+      "id": "exemplo",
+      "nome": "Programa Exemplo",
+      "descricao": "Programa fictício para mostrar como o Atlas organiza os protótipos.",
+      "projetos": [
+        {
+          "id": "exemplo/backoffice",
+          "nome": "Backoffice",
+          "descricao": "Ferramentas internas das equipes.",
+          "total": 1
+        },
+        {
+          "id": "exemplo/portal-cliente",
+          "nome": "Portal do Cliente",
+          "descricao": "Jornadas do cliente no app e no site.",
+          "total": 1
+        }
+      ]
+    }
+  ],
+  "prototipos": [
+    {
+      "id": "exemplo/backoffice/painel-tarefas",
+      "nome": "painel-tarefas",
+      "caminho": "prototipos/exemplo/backoffice/painel-tarefas",
+      "situacao": "oficial",
+      "versao": 1,
+      "programa": "exemplo",
+      "projeto": "backoffice",
+      "modulo": "Gestão",
+      "fluxo": "Acompanhar tarefas",
+      "descricao": "Exemplo de protótipo com build: o comando gera a saída estática em dist/.",
+      "status": "rascunho",
+      "dispositivo": "desktop",
+      "donos": [
+        "VanzSantos"
+      ],
+      "tags": [
+        "exemplo"
+      ],
+      "entrada": "index.html",
+      "canvas": "canvas/index.html",
+      "mapa": "mapa/index.html",
+      "origem": "codex",
+      "build": {
+        "comando": "node build.mjs",
+        "saida": "dist"
+      },
+      "telas": [],
+      "url": "p/exemplo/backoffice/painel-tarefas/index.html",
+      "canvasUrl": "p/exemplo/backoffice/painel-tarefas/canvas/index.html",
+      "mapaUrl": "p/exemplo/backoffice/painel-tarefas/mapa/index.html",
+      "miniatura": "p/exemplo/backoffice/painel-tarefas/miniatura.png",
+      "git": {
+        "criadoEm": "2026-11-12T16:14:14-03:00",
+        "criadoPor": "Vanz Santos",
+        "atualizadoEm": "2026-11-12T16:14:14-03:00",
+        "alteradoPor": "Vanz Santos",
+        "ultimoCommit": "cae8ea6",
+        "autores": [
+          "Vanz Santos"
+        ]
+      },
+      "historico": [
+        {
+          "sha": "cae8ea6",
+          "data": "2026-11-12T16:14:14-03:00",
+          "autor": "Vanz Santos",
+          "pr": 2,
+          "prUrl": "https://github.com/VanzSantos/atlas-prototipos/pull/2",
+          "prints": [],
+          "titulo": "Primeira versão do painel de tarefas",
+          "resumo": "Criamos um painel para as equipes internas acompanharem as tarefas: cada linha mostra a tarefa, quem é responsável e em que situação ela está.\n\nAinda é um rascunho. O próximo passo é permitir abrir o detalhe de uma tarefa.",
+          "tecnico": false
+        }
+      ],
+      "emAndamento": []
+    },
+    {
+      "id": "exemplo/portal-cliente/agendamento-consulta",
+      "nome": "agendamento-consulta",
+      "caminho": "prototipos/exemplo/portal-cliente/agendamento-consulta",
+      "situacao": "oficial",
+      "versao": 1,
+      "programa": "exemplo",
+      "projeto": "portal-cliente",
+      "modulo": "Atendimento",
+      "fluxo": "Agendar consulta",
+      "descricao": "Exemplo de protótipo estático: HTML puro, sem build, com duas telas por hash.",
+      "status": "em-andamento",
+      "dispositivo": "app",
+      "donos": [
+        "VanzSantos"
+      ],
+      "tags": [
+        "exemplo",
+        "agenda"
+      ],
+      "entrada": "index.html",
+      "canvas": "canvas/index.html",
+      "mapa": "mapa/index.html",
+      "origem": "claude",
+      "build": null,
+      "telas": [
+        {
+          "id": "escolher-data",
+          "titulo": "Escolher data",
+          "rota": "#/data"
+        },
+        {
+          "id": "confirmar",
+          "titulo": "Confirmação",
+          "rota": "#/confirmar"
+        }
+      ],
+      "url": "p/exemplo/portal-cliente/agendamento-consulta/index.html",
+      "canvasUrl": "p/exemplo/portal-cliente/agendamento-consulta/canvas/index.html",
+      "mapaUrl": "p/exemplo/portal-cliente/agendamento-consulta/mapa/index.html",
+      "miniatura": "p/exemplo/portal-cliente/agendamento-consulta/miniatura.png",
+      "git": {
+        "criadoEm": "2026-11-12T16:14:14-03:00",
+        "criadoPor": "Vanz Santos",
+        "atualizadoEm": "2026-11-13T08:53:54-03:00",
+        "alteradoPor": "Vanz Santos",
+        "ultimoCommit": "5aa2289",
+        "autores": [
+          "Vanz Santos"
+        ]
+      },
+      "historico": [
+        {
+          "sha": "5aa2289",
+          "data": "2026-11-13T08:53:54-03:00",
+          "autor": "Vanz Santos",
+          "pr": 4,
+          "prUrl": "https://github.com/VanzSantos/atlas-prototipos/pull/4",
+          "prints": [
+            "p/exemplo/portal-cliente/agendamento-consulta/historico/5aa22890ecbaf1970315e221dac3ef92a23a6cdb/1-escolher-data.png",
+            "p/exemplo/portal-cliente/agendamento-consulta/historico/5aa22890ecbaf1970315e221dac3ef92a23a6cdb/2-confirmar.png"
+          ],
+          "titulo": "Novo horário na sexta-feira",
+          "resumo": "Na tela de escolher a data, agora também aparece a opção **sexta, às 9h**. Assim a pessoa tem três horários para escolher em vez de dois.",
+          "tecnico": false
+        },
+        {
+          "sha": "cae8ea6",
+          "data": "2026-11-12T16:14:14-03:00",
+          "autor": "Vanz Santos",
+          "pr": 2,
+          "prUrl": "https://github.com/VanzSantos/atlas-prototipos/pull/2",
+          "prints": [],
+          "titulo": "Primeira versão do agendamento",
+          "resumo": "Criamos o fluxo de agendar consulta pelo app, com duas telas:\n\n- **Escolher data:** a pessoa vê os horários disponíveis e toca no que preferir.\n- **Confirmação:** mostra que a consulta foi marcada e avisa que haverá um lembrete um dia antes.\n\nTambém criamos o canvas com as telas e as anotações, e o mapa do fluxo.",
+          "tecnico": false
+        }
+      ],
+      "emAndamento": []
+    }
+  ],
+  "emAndamento": []
+}
