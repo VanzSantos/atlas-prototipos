@@ -1,6 +1,6 @@
 {
   "versao": 1,
-  "geradoEm": "2026-11-13T11:59:57.343Z",
+  "geradoEm": "2026-11-13T17:23:57.317Z",
   "ambiente": "oficial",
   "ref": "main",
   "commit": "8b9f0bf",
@@ -165,5 +165,17 @@
       "emAndamento": []
     }
   ],
-  "emAndamento": []
+  "emAndamento": [
+    {
+      "numero": 6,
+      "titulo": "docs: proteção da main (D36)",
+      "branch": "docs/protecao-main",
+      "autor": "VanzSantos",
+      "url": "https://vanzsantos.github.io/atlas-prototipos/pr-preview/pr-6/",
+      "pastas": [
+        "CONTRIBUTING.md",
+        "DECISOES.md"
+      ]
+    }
+  ]
 }
