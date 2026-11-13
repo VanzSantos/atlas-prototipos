@@ -1,6 +1,6 @@
 {
   "versao": 1,
-  "geradoEm": "2026-11-12T20:23:32.178Z",
+  "geradoEm": "2026-11-13T11:52:27.108Z",
   "ambiente": "oficial",
   "ref": "main",
   "commit": "6eb2a6d",
@@ -148,8 +148,28 @@
           "tecnico": false
         }
       ],
-      "emAndamento": []
+      "emAndamento": [
+        {
+          "numero": 4,
+          "titulo": "agendamento-consulta: horário de sexta às 9h",
+          "autor": "VanzSantos",
+          "url": "https://vanzsantos.github.io/atlas-prototipos/pr-preview/pr-4/"
+        }
+      ]
     }
   ],
-  "emAndamento": []
+  "emAndamento": [
+    {
+      "numero": 4,
+      "titulo": "agendamento-consulta: horário de sexta às 9h",
+      "branch": "prototipo/exemplo/portal-cliente/agendamento-consulta",
+      "autor": "VanzSantos",
+      "url": "https://vanzsantos.github.io/atlas-prototipos/pr-preview/pr-4/",
+      "pastas": [
+        "prototipos/exemplo/portal-cliente/agendamento-consulta/canvas/index.html",
+        "prototipos/exemplo/portal-cliente/agendamento-consulta/historico/2026-11-13-horario-de-sexta.md",
+        "prototipos/exemplo/portal-cliente/agendamento-consulta/index.html"
+      ]
+    }
+  ]
 }
