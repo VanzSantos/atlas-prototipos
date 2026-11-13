@@ -64,8 +64,12 @@ Guia curto para quem vai adicionar ou mudar um protótipo. Não precisa saber Gi
    - confere tudo (o PR fica vermelho se faltar algum campo ou o resumo no histórico);
    - comenta no PR um **link de preview** com a sua versão;
    - mostra o PR na seção **Em andamento** da versão oficial do Atlas.
-8. **Peça revisão.** O PR precisa de build passando e 1 aprovação. O merge é feito como *squash*
-   e a branch é apagada sozinha depois.
+8. **Peça revisão.** O PR só pode entrar quando:
+   - a verificação **Validar e montar** estiver verde;
+   - **1 pessoa** tiver aprovado, de preferência o dono da pasta (veja o [CODEOWNERS](CODEOWNERS)).
+     Se você mudar o PR depois da aprovação, é preciso aprovar de novo.
+
+   O merge é sempre **Squash and merge**, e a branch é apagada sozinha depois.
 
 ## Mensagens de commit
 
