@@ -15,15 +15,24 @@ export function git(args) {
 
 const PASTA = /^prototipos\/([^/]+)\/([^/]+)\/([^/]+)\//;
 
-/** Arquivos alterados entre a base e o HEAD (com status: A, M, D, R...). */
+/**
+ * Arquivos alterados desde o ponto em que a branch saiu da base (status: A, M, D...).
+ * Inclui o que ainda não foi commitado, para a checagem funcionar antes do commit também.
+ */
 export function arquivosAlterados(base) {
-  return git(["diff", "--name-status", "--no-renames", `${base}...HEAD`])
+  const inicio = git(["merge-base", base, "HEAD"]) || base;
+  const mudados = git(["diff", "--name-status", "--no-renames", inicio])
     .split("\n")
     .filter(Boolean)
     .map((linha) => {
       const [status, caminho] = linha.split("\t");
       return { status, caminho };
     });
+  const novos = git(["ls-files", "--others", "--exclude-standard"])
+    .split("\n")
+    .filter(Boolean)
+    .map((caminho) => ({ status: "A", caminho }));
+  return [...mudados, ...novos];
 }
 
 /** Pastas de protótipo (prototipos/<programa>/<projeto>/<nome>) alteradas desde a base. */
