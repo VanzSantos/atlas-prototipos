@@ -1,9 +1,9 @@
 {
   "versao": 1,
-  "geradoEm": "2026-11-13T11:52:27.108Z",
+  "geradoEm": "2026-11-13T11:54:21.334Z",
   "ambiente": "oficial",
   "ref": "main",
-  "commit": "6eb2a6d",
+  "commit": "5aa2289",
   "repositorio": "https://github.com/VanzSantos/atlas-prototipos",
   "programas": [
     {
@@ -128,14 +128,28 @@
       "git": {
         "criadoEm": "2026-11-12T16:14:14-03:00",
         "criadoPor": "Vanz Santos",
-        "atualizadoEm": "2026-11-12T16:14:14-03:00",
+        "atualizadoEm": "2026-11-13T08:53:54-03:00",
         "alteradoPor": "Vanz Santos",
-        "ultimoCommit": "cae8ea6",
+        "ultimoCommit": "5aa2289",
         "autores": [
           "Vanz Santos"
         ]
       },
       "historico": [
+        {
+          "sha": "5aa2289",
+          "data": "2026-11-13T08:53:54-03:00",
+          "autor": "Vanz Santos",
+          "pr": 4,
+          "prUrl": "https://github.com/VanzSantos/atlas-prototipos/pull/4",
+          "prints": [
+            "p/exemplo/portal-cliente/agendamento-consulta/historico/5aa22890ecbaf1970315e221dac3ef92a23a6cdb/1-escolher-data.png",
+            "p/exemplo/portal-cliente/agendamento-consulta/historico/5aa22890ecbaf1970315e221dac3ef92a23a6cdb/2-confirmar.png"
+          ],
+          "titulo": "Novo horário na sexta-feira",
+          "resumo": "Na tela de escolher a data, agora também aparece a opção **sexta, às 9h**. Assim a pessoa tem três horários para escolher em vez de dois.",
+          "tecnico": false
+        },
         {
           "sha": "cae8ea6",
           "data": "2026-11-12T16:14:14-03:00",
@@ -148,28 +162,8 @@
           "tecnico": false
         }
       ],
-      "emAndamento": [
-        {
-          "numero": 4,
-          "titulo": "agendamento-consulta: horário de sexta às 9h",
-          "autor": "VanzSantos",
-          "url": "https://vanzsantos.github.io/atlas-prototipos/pr-preview/pr-4/"
-        }
-      ]
+      "emAndamento": []
     }
   ],
-  "emAndamento": [
-    {
-      "numero": 4,
-      "titulo": "agendamento-consulta: horário de sexta às 9h",
-      "branch": "prototipo/exemplo/portal-cliente/agendamento-consulta",
-      "autor": "VanzSantos",
-      "url": "https://vanzsantos.github.io/atlas-prototipos/pr-preview/pr-4/",
-      "pastas": [
-        "prototipos/exemplo/portal-cliente/agendamento-consulta/canvas/index.html",
-        "prototipos/exemplo/portal-cliente/agendamento-consulta/historico/2026-11-13-horario-de-sexta.md",
-        "prototipos/exemplo/portal-cliente/agendamento-consulta/index.html"
-      ]
-    }
-  ]
+  "emAndamento": []
 }
